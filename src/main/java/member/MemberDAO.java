@@ -13,7 +13,9 @@ public class MemberDAO {
 	// 데이터베이스 작업 객체,주제
 	// 특징(속성) 저장하는 변수 => 멤버변수
 	// 기능을 정의한 함수 => 멤버함수 => 메서드
-	
+	Connection con=null;
+	PreparedStatement pstmt=null;
+	ResultSet rs=null;
 	//디비연결 메서드 정의
 	public Connection getConnection() throws Exception{
 		// throws Exception : 예외처리는 함수호출하는 곳에서 하겠다
@@ -39,6 +41,11 @@ public class MemberDAO {
 	}
 	
 	
+	public void closeDB() {
+		if(rs!=null) try { rs.close(); } catch (Exception e2) {	}
+		if(pstmt!=null) try { pstmt.close(); } catch (Exception e2) {	}
+		if(con!=null) try { con.close(); } catch (Exception e2) {	}	
+	}
 	// 회원가입하는 기능 => 함수정의
 	// 리턴할 형 없음
 	// 전달받은 값을 저장하는 변수=>매개변수
@@ -53,8 +60,6 @@ public class MemberDAO {
 		
 		System.out.println("메서드 시작");
 	
-		Connection con=null;
-		PreparedStatement pstmt=null;
 		try {
 			// 에러 발생 가능성이 높은 명령
 //			System.out.println("나누기 : "+ a/b);
@@ -89,8 +94,7 @@ public class MemberDAO {
 		}finally {
 			// 에러 발생 여부 상관없이 마무리작업=> 내장객체 기억장소 해제
 			System.out.println("마무리작업");
-			if(pstmt!=null) try { pstmt.close(); } catch (Exception e2) {	}
-			if(con!=null) try { con.close(); } catch (Exception e2) {	}			
+			closeDB();	
 		}
 		
 		System.out.println("메서드 종료");
@@ -100,9 +104,7 @@ public class MemberDAO {
 	// 리턴할형 MemberDTO   getMember(String id) 메서드 정의
 	public MemberDTO getMember(String id) {
 		MemberDTO memberDTO=null;
-		Connection con=null;
-		PreparedStatement pstmt=null;
-		ResultSet rs=null;
+		
 		try {
 			//1, 2단계 디비연결 메서드 호출
 			con =getConnection();
@@ -130,9 +132,7 @@ public class MemberDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
-			if(rs!=null) try { rs.close(); } catch (Exception e2) {	}
-			if(pstmt!=null) try { pstmt.close(); } catch (Exception e2) {	}
-			if(con!=null) try { con.close(); } catch (Exception e2) {	}	
+			closeDB();
 		}
 		return memberDTO;
 	}//getMember()
@@ -140,9 +140,7 @@ public class MemberDAO {
 	// 리턴할형 MemberDTO   userCheck(String id, String pass) 메서드 정의
 	public MemberDTO userCheck(String id, String pass) {
 		MemberDTO memberDTO=null;
-		Connection con=null;
-		PreparedStatement pstmt=null;
-		ResultSet rs=null;
+		
 		try {
 			//1, 2단계 디비연결 메서드 호출
 			con =getConnection();
@@ -175,18 +173,14 @@ public class MemberDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
-			if(rs!=null) try { rs.close(); } catch (Exception e2) {	}
-			if(pstmt!=null) try { pstmt.close(); } catch (Exception e2) {	}
-			if(con!=null) try { con.close(); } catch (Exception e2) {	}	
+			closeDB();	
 		}
 		return memberDTO;
 	}
 	
 	// 리턴할형 없음  updateMember(MemberDTO updateDTO) 수정작업 메서드 정의
 	public void updateMember(MemberDTO updateDTO) {
-		Connection con=null;
-		PreparedStatement pstmt=null;
-		ResultSet rs=null;
+		
 		try {
 			//1, 2단계 디비연결 메서드 호출
 			con =getConnection();
@@ -204,17 +198,13 @@ public class MemberDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
-			if(rs!=null) try { rs.close(); } catch (Exception e2) {	}
-			if(pstmt!=null) try { pstmt.close(); } catch (Exception e2) {	}
-			if(con!=null) try { con.close(); } catch (Exception e2) {	}	
+			closeDB();	
 		}
 	}//
 	
 	// 리턴할형 없음  deleteMember(String id) 수정작업 메서드 정의
 	public void deleteMember(String id) {
-		Connection con=null;
-		PreparedStatement pstmt=null;
-		ResultSet rs=null;
+		
 		try {
 			//1, 2단계 디비연결 메서드 호출
 			con =getConnection();
@@ -230,15 +220,11 @@ public class MemberDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
-			if(rs!=null) try { rs.close(); } catch (Exception e2) {	}
-			if(pstmt!=null) try { pstmt.close(); } catch (Exception e2) {	}
-			if(con!=null) try { con.close(); } catch (Exception e2) {	}	
+			closeDB();	
 		}
 	}//
 	public int joinIdCheck(String id) {
-		Connection con=null;
-		PreparedStatement  pstmt=null;
-		ResultSet rs=null;
+		
 		int result = -1;
 		try {
 			con = getConnection();
@@ -257,9 +243,7 @@ public class MemberDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{
-			if(rs!=null) try { rs.close(); } catch (Exception e2) {	}
-			if(pstmt!=null) try { pstmt.close(); } catch (Exception e2) {	}
-			if(con!=null) try { con.close(); } catch (Exception e2) {	}	
+			closeDB();	
 		}
 		return result;
 	}
