@@ -86,7 +86,9 @@
 					}
 				}).open();
 	}
+	var idCheck = 0;
 	function fn_CheckId() {
+			
 		if (document.fr.id.value == "" || document.fr.id.value < 0) {
 			alert("ID를 입력하세요");
 			document.fr.id.focus();
@@ -94,6 +96,8 @@
 		} else {
 			window.open("joinIdCheck.jsp?userid=" + document.fr.id.value, "",
 					"width=500, height=300");
+			 result = 1;
+			 
 		}
 	}
 
@@ -101,6 +105,11 @@
 		if (document.fr.id.value == "") {
 			alert("ID를 입력하세요");
 			document.fr.id.focus();
+			return false;
+		}
+		if(idCheck == 0) {
+			alert("아이디 중복확인 하세요");
+			
 			return false;
 		}
 

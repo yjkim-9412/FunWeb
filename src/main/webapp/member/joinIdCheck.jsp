@@ -33,11 +33,14 @@
 		</form>
 	</fieldset>
 	<script type="text/javascript">
+		
 		function result() {
+			
+			
 			opener.document.fr.id.value = document.wfr.userid.value;
 
 			opener.document.fr.id.readOnly = true;
-
+			
 			window.close();
 		}
 	</script>
