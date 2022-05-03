@@ -54,15 +54,12 @@ memberDAO.insertMember(memberDTO);
 //public void insertMember(MemberDTO 주소저장변수) 메서드 정의
 //MemberDAO 파일안에 있는 insertMember(MemberDTO 주소)메서드 호출
 
-
+response.sendRedirect("login.jsp");
 %>
 
-//login.jsp 이동
-<script type="text/javascript">
-// 	alert("회원가입성공");
-	location.href="login.jsp";
+
 	
-</script>
+
 </body>
 </html>
 
