@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>member/main.jsp</title>
 <link href="../css/default.css" rel="stylesheet" type="text/css">
 <link href="../css/front.css" rel="stylesheet" type="text/css">
 
