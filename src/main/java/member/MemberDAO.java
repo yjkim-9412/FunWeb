@@ -53,10 +53,14 @@ public class MemberDAO {
 	// MemberDTO 주소를 저장하는 변수
 	public void insertMember(MemberDTO memberDTO) {
 		System.out.println("MemberDAO클래스 파일 insertMember()메서드");
-		System.out.println("폼에서 전달해온 주소 : "+memberDTO);
+		
 		System.out.println("폼에서 전달해온 아이디 : "+memberDTO.getId());
 		System.out.println("폼에서 전달해온 비밀번호 : "+memberDTO.getPass());
 		System.out.println("폼에서 전달해온 이름 : "+memberDTO.getName());
+		System.out.println("폼에서 전달해온 이메일 : "+memberDTO.getEmail());
+		System.out.println("폼에서 전달해온 주소 : "+memberDTO.getAddress());
+		System.out.println("폼에서 전달해온 집전화 : "+memberDTO.getPhone());
+		System.out.println("폼에서 전달해온 개인번호 : "+memberDTO.getMobile());
 		
 		System.out.println("메서드 시작");
 	
@@ -169,6 +173,10 @@ public class MemberDAO {
 				memberDTO.setPass(rs.getString("pass"));
 				memberDTO.setName(rs.getString("name"));
 				memberDTO.setDate(rs.getTimestamp("date"));
+				memberDTO.setEmail(rs.getString("email"));
+				memberDTO.setAddress(rs.getString("address"));
+				memberDTO.setMobile(rs.getString("mobile"));
+				memberDTO.setPhone(rs.getString("phone"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -204,7 +212,7 @@ public class MemberDAO {
 	
 	// 리턴할형 없음  deleteMember(String id) 수정작업 메서드 정의
 	public void deleteMember(String id) {
-		
+			
 		try {
 			//1, 2단계 디비연결 메서드 호출
 			con =getConnection();
@@ -223,6 +231,7 @@ public class MemberDAO {
 			closeDB();	
 		}
 	}//
+	
 	public int joinIdCheck(String id) {
 		
 		int result = -1;
@@ -247,5 +256,6 @@ public class MemberDAO {
 		}
 		return result;
 	}
+	
 	
 }//클래스
