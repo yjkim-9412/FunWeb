@@ -1,7 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <header>
-<div id="login"><a href="../member/login.jsp">login</a> | <a href="../member/join.jsp">join</a></div>
+<%
+// 세션값 가져오는 작업
+String id = (String)session.getAttribute("id");
+// 세션값 없으면 login join
+if(id == null){%>
+	<div id="login"><a href="../member/login.jsp">login</a> | 
+					<a href="../member/join.jsp">join</a></div><% 
+
+// 세션값 있으면 ...님 logout update
+}else{%>
+
+	<div id="login"><a href="../member/logout.jsp">logout</a></div>
+	
+<%}%>
 <div class="clear"></div>
 <!-- 로고들어가는 곳 -->
 <div id="logo"><img src="../images/logo.gif" width="265" height="62" alt="Fun Web"></div>
