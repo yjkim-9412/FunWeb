@@ -30,7 +30,7 @@ boardDTO.setReadcount(readcount);
 
 boardDAO.insertBoard(boardDTO);
 
-response.sendRedirect("notice.jsp")
+response.sendRedirect("notice.jsp");
 %>
 </body>
 </html>

@@ -86,34 +86,21 @@ function fn_Checkaddr() {
 				}).open();
 	}
 	
-var result;
-function fn_CheckId() {
-	if (document.fr.id.value == "" || document.fr.id.value < 0) {
+
+var result = null;
+	function fn_CheckId() {
+		if (document.fr.id.value == "" || document.fr.id.value < 0) {
 		alert("ID를 입력하세요");
 		document.fr.id.focus();
 		
 		
-	} else {
-		window.open("joinIdCheck.jsp?userid=" + document.fr.id.value, "",
+		} else {
+		
+			 window.open("joinIdCheck.jsp?userid=" + document.fr.id.value, "",
 				"width=500, height=300");
-		
-		
-		if(result == 1) {
-			alert("사용가능한 아이디 입니다");
-			
-			
-		} else if (result == 0) {
-			alert("중복된 아이디 입니다")
-			
-			
+				}
 		}
-	}
-	
-	
-	
-}
-		
-	
+
 
 	function fn_Checkpass() {
 		if (document.fr.id.value == "") {
@@ -186,7 +173,7 @@ function fn_CheckId() {
 <legend>기본정보</legend>
 <label>ID</label>
 <input type="text" name="id" class="id">
-<input type="button" value="중복확인" class="dup"  onclick="fn_CheckId()" style="cursor: pointer;"><br>
+<input type="button" value="중복확인" class="dup"  onclick="fn_CheckId();" style="cursor: pointer;"><br>
 <label>비밀번호</label>
 <input type="password" name="pass" id="Pass"><br>
 <label>비밀번호 확인</label>
