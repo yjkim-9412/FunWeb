@@ -25,8 +25,7 @@
 <body>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
-	
-	function fn_Checkaddr() {
+function fn_Checkaddr() {
 		new daum.Postcode(
 				{
 					oncomplete : function(data) {
@@ -86,20 +85,35 @@
 					}
 				}).open();
 	}
-	var idCheck = 0;
-	function fn_CheckId() {
+	
+var result;
+function fn_CheckId() {
+	if (document.fr.id.value == "" || document.fr.id.value < 0) {
+		alert("ID를 입력하세요");
+		document.fr.id.focus();
+		
+		
+	} else {
+		window.open("joinIdCheck.jsp?userid=" + document.fr.id.value, "",
+				"width=500, height=300");
+		
+		
+		if(result == 1) {
+			alert("사용가능한 아이디 입니다");
 			
-		if (document.fr.id.value == "" || document.fr.id.value < 0) {
-			alert("ID를 입력하세요");
-			document.fr.id.focus();
-			return false;
-		} else {
-			window.open("joinIdCheck.jsp?userid=" + document.fr.id.value, "",
-					"width=500, height=300");
-			 result = 1;
-			 
+			
+		} else if (result == 0) {
+			alert("중복된 아이디 입니다")
+			
+			
 		}
 	}
+	
+	
+	
+}
+		
+	
 
 	function fn_Checkpass() {
 		if (document.fr.id.value == "") {
@@ -107,7 +121,7 @@
 			document.fr.id.focus();
 			return false;
 		}
-		if(idCheck == 0) {
+		if(result == 0 || result == null) {
 			alert("아이디 중복확인 하세요");
 			
 			return false;

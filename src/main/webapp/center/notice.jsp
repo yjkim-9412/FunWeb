@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>center/notice.jsp</title>
 <link href="../css/default.css" rel="stylesheet" type="text/css">
 <link href="../css/subpage.css" rel="stylesheet" type="text/css">
 <!--[if lt IE 9]>
@@ -23,11 +23,11 @@
  <![endif]-->
 </head>
 <body>
+
 <div id="wrap">
 <!-- 헤더들어가는 곳 -->
 <jsp:include page="../inc/top.jsp"></jsp:include>
 <!-- 헤더들어가는 곳 -->
-<jsp:include page="../inc/top.jsp"></jsp:include>
 <!-- 본문들어가는 곳 -->
 <!-- 메인이미지 -->
 <div id="sub_img_center"></div>
@@ -43,7 +43,9 @@
 </ul>
 </nav>
 <!-- 왼쪽메뉴 -->
+<%
 
+%>
 <!-- 게시판 -->
 <article>
 <h1>Notice</h1>
@@ -87,6 +89,14 @@
 <div id="table_search">
 <input type="text" name="search" class="input_box">
 <input type="button" value="search" class="btn">
+</div>
+<div id="table_search">
+<%
+String id = (String)session.getAttribute("id");
+if (id != null) {
+%>
+<input type="button" value="글쓰기" class="btn" onclick="location.href='write.jsp'">
+<%} %>
 </div>
 <div class="clear"></div>
 <div id="page_control">

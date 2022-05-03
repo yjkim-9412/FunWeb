@@ -6,13 +6,16 @@
 String id = (String)session.getAttribute("id");
 // 세션값 없으면 login join
 if(id == null){%>
-	<div id="login"><a href="../member/login.jsp">login</a> | 
+	<div id="login">
+					<a href="../member/login.jsp">login</a> | 
 					<a href="../member/join.jsp">join</a></div><% 
 
 // 세션값 있으면 ...님 logout update
 }else{%>
-
-	<div id="login"><a href="../member/logout.jsp">logout</a></div>
+					
+					
+	<div id="login"><a href="../member/update.jsp">set profile</a> |
+					<a href="../member/logout.jsp">logout</a></div>
 	
 <%}%>
 <div class="clear"></div>

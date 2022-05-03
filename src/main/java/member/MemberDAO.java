@@ -130,8 +130,14 @@ public class MemberDAO {
 				memberDTO=new MemberDTO();
 				memberDTO.setId(rs.getString("id"));
 				memberDTO.setPass(rs.getString("pass"));
-				memberDTO.setName(rs.getString("name"));     
-				memberDTO.setDate(rs.getTimestamp("date")); 
+				memberDTO.setName(rs.getString("name"));
+				memberDTO.setDate(rs.getTimestamp("date"));
+				memberDTO.setEmail(rs.getString("email"));
+				memberDTO.setAddress(rs.getString("address"));
+				memberDTO.setMobile(rs.getString("mobile"));
+				memberDTO.setPhone(rs.getString("phone"));
+				memberDTO.setDate(rs.getTimestamp("date"));
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -196,10 +202,15 @@ public class MemberDAO {
 			//3단계  연결정보를 이용해서 sql구문 만들기 =>  PreparedStatement
 			// 문자열 => sql구문 변경, 실행할수 있는 내장객체 => PreparedStatement
 			// update 테이블이름 set 수정열=값 where 조건열=값;
-			String sql="update member set name=? where id=?";
+			String sql="update member set id=?, name=?, eamil=?, address=?, phone=?, mobile=?, where id=?";
 			pstmt=con.prepareStatement(sql);
-			pstmt.setString(1, updateDTO.getName());
-			pstmt.setString(2, updateDTO.getId());
+			
+			pstmt.setString(1, updateDTO.getId());
+			pstmt.setString(2, updateDTO.getName());
+			pstmt.setString(3, updateDTO.getEmail());
+			pstmt.setString(4, updateDTO.getAddress());
+			pstmt.setString(5, updateDTO.getPhone());
+			pstmt.setString(6, updateDTO.getMobile());
 			//4단계   PrepardStatement sql구문 실행 (insert,update,delete)		
 			pstmt.executeUpdate();
 			
@@ -256,6 +267,7 @@ public class MemberDAO {
 		}
 		return result;
 	}
+	
 	
 	
 }//클래스

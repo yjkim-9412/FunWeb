@@ -25,6 +25,7 @@
  <![endif]-->
 </head>
 <body>
+
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
 var idCheck = 0;
@@ -178,7 +179,9 @@ function fn_CheckId() {
 <!-- 본문내용 -->
 <%
 String id = (String)session.getAttribute("id");
+out.print(id);
 MemberDAO memberDAO = new MemberDAO();
+
 MemberDTO memberDTO = memberDAO.getMember(id);
 %>
 <article>
@@ -186,34 +189,34 @@ MemberDTO memberDTO = memberDAO.getMember(id);
 <form action="updatePro.jsp" name="fr" id="join" method="post" onsubmit="return fn_Checkpass();">
 <fieldset>
 <legend>기본정보</legend>
-<label>ID<script>fn_CheckId();</script></label>
-<input type="text" name="id" class="id">
+<label>ID</label>
+<input type="text" name="id" class="id" value="<%=memberDTO.getId()%>">
 <input type="button" value="중복확인" class="dup"  onclick="fn_CheckId()" style="cursor: pointer;"><br>
-<label>비밀번호</label>
+<label>비밀번호 변경</label>
 <input type="password" name="pass" id="Pass"><br>
 <label>비밀번호 확인</label>
 <input type="password" name="pass2" id="Pass2"><br>
 <label>이름</label>
-<input type="text" name="name"><br>
+<input type="text" name="name" value="<%=memberDTO.getName()%>"><br>
 <label>E-Mail</label>
-<input type="email" name="email"><br>
+<input type="email" name="email" value="<%=memberDTO.getEmail()%>"><br>
 </fieldset>
 
 <fieldset>
 <legend>선택정보</legend>
 <label>주소</label>
-<input type="text" name="address" id="addr1" >
+<input type="text" name="address" value="<%=memberDTO.getAddress()%>" id="addr1" >
 <input type="button" value="주소검색" class="dup"  onclick="fn_Checkaddr()" style="cursor: pointer;"><br>
 <label>상세주소</label>
-<input type="text" name="address2" id="addr1" ><br>
+<input type="text" value="address2" id="addr1" ><br>
 <label>집전화</label>
-<input type="text" name="phone"><br>
+<input type="text" name="phone" value="<%=memberDTO.getPhone()%>"><br>
 <label>개인번호</label>
-<input type="text" name="mobile"><br>
+<input type="text" name="mobile" value="<%=memberDTO.getMobile()%>"><br>
 </fieldset>
 <div class="clear"></div>
 <div id="buttons">
-<input type="submit" value="회원가입" class="submit" style="cursor: pointer;">
+<input type="submit" value="회원정보수정" class="submit" style="cursor: pointer;">
 <input type="reset" value="취소" class="cancel" style="cursor: pointer;">
 </div>
 </form>
