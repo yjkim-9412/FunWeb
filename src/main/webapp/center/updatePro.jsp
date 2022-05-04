@@ -20,7 +20,10 @@ boardDTO.setName("name");
 boardDTO.setSubject("subject");
 boardDTO.setContent("content");
 
-BoardDAO boardDAO = boardDTO();
+BoardDAO boardDAO = new BoardDAO();
+boardDAO.updateBoard(num);
+
+response.sendRedirect("notice.jsp");
 %>
 </body>
 </html>

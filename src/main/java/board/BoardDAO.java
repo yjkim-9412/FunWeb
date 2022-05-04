@@ -167,4 +167,24 @@ public class BoardDAO {
 			closeDB();
 		}
 	}// updateReadcount
+	
+	public void updateBoard(int num) {
+		BoardDTO boardDTO = null;
+		try {
+			con=getConnection();
+			
+			String sql="update board set name=?, subject=?, content=? where num=? ";
+			pstmt=con.prepareStatement(sql);
+			boardDTO = new BoardDTO();
+			pstmt.setString(1, boardDTO.getName());
+			pstmt.setString(2, boardDTO.getSubject());
+			pstmt.setString(3, boardDTO.getContent());
+			pstmt.setInt(4, num);
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeDB();
+		}
+	}
 }// class

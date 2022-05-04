@@ -78,11 +78,11 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:m");
 <div id="table_search">
 <%if(id != null ) {
 	if(id.equals(boardDTO.getName())) {%>
-<input type="button" value="글수정" class="btn" onclick="location.href='update.jsp?num='<%=boardDTO.getNum()%>'">
-<input type="button" value="글삭제" class="btn" onclick="location.href='deleteForm.jsp?num='<%=boardDTO.getNum()%>'">
+<input type="button" value="글수정" class="btn" onclick="location.href='update.jsp?num=<%=boardDTO.getNum()%>'">
+<input type="button" value="글삭제" class="btn" onclick="location.href='deleteForm.jsp?num=<%=boardDTO.getNum()%>'">
 <%}
 }%>
-<input type="button" value="글목록" class="btn" onclick="location.href='notice.jsp">
+<input type="button" value="글목록" class="btn" onclick="location.href=notice.jsp">
 
 </div>
 
