@@ -53,7 +53,7 @@ response.sendRedirect("../member/login.jsp");
 <!-- 게시판 -->
 <article>
 <h1>Notice Write</h1>
-<form action="writePro.jsp" method="get">
+<form action="writePro.jsp" method="post">
 <input type="hidden" name="pass" value="1111">
 <table id="notice">
 <tr><td>작성자</td><td><input type="text" name="name" value="<%=id%>" readonly></td></tr>

@@ -1,6 +1,5 @@
-<%@page import="java.text.DateFormat"%>
+<%@page import="member.MemberDAO"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.util.List"%>
 <%@page import="board.BoardDTO"%>
 <%@page import="board.BoardDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -9,7 +8,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>center/notice.jsp</title>
+<title>center/content.jsp</title>
 <link href="../css/default.css" rel="stylesheet" type="text/css">
 <link href="../css/subpage.css" rel="stylesheet" type="text/css">
 <!--[if lt IE 9]>
@@ -48,55 +47,47 @@
 </ul>
 </nav>
 <!-- 왼쪽메뉴 -->
-<%
-
-
-BoardDAO boardDAO = new BoardDAO();
-
-
-List boardList=boardDAO.getBoardList();
-
-// 날짜 => 문자열(원하는 포맷) 변경
-SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
-%>
 <!-- 게시판 -->
-<article>
-<h1>Notice</h1>
-<table id="notice">
-<tr><th class="tno">No.</th>
-    <th class="ttitle">Title</th>
-    <th class="twrite">Writer</th>
-    <th class="tdate">Date</th>
-    <th class="tread">Read</th></tr>
-    <%
-    for(int i = 0; i < boardList.size(); i++){
-    	// 배열 한칸 데이터 가져올때 get()
-    	BoardDTO boardDTO = (BoardDTO)boardList.get(i);%>
-    	<tr onclick="location.href='content.jsp?num=<%=boardDTO.getNum()%>'"><td><%= boardDTO.getNum()%></td><td class="left"><%= boardDTO.getSubject()%></td>
-        <td></td><td><%=dateFormat.format(boardDTO.getDate())%></td><td><%= boardDTO.getReadcount()%></td></tr>
-   <% }%>
-</table>
-<div id="table_search">
-<input type="text" name="search" class="input_box">
-<input type="button" value="search" class="btn">
-</div>
-<div id="table_search">
 <%
 String id = (String)session.getAttribute("id");
-if (id != null) {
+int num = Integer.parseInt(request.getParameter("num"));
+BoardDAO boardDAO = new BoardDAO();
+
+//게시판 글 조회수 증가
+// 리턴할형 없음 updateReadcount(int num) 메서드
+// update board set readcount = readcount +1 where num=?
+// updateReadcount(num) 호출
+
+BoardDTO boardDTO = boardDAO.getBoard(num);
+boardDAO.updateReadcount(num);
+MemberDAO memberDAO = new MemberDAO();
+
+SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:m");
 %>
-<input type="button" value="글쓰기" class="btn" onclick="location.href='write.jsp'">
-<%} %>
+<article>
+<h1>Notice Write</h1>
+<table id="notice">
+<tr><td>글번호</td><td><%=boardDTO.getNum()%></td>
+    <td>등록일</td><td><%=dateFormat.format(boardDTO.getDate())%></td></tr>
+<tr><td>글쓴이</td><td><%=boardDTO.getName()%></td>
+    <td>조회수</td><td><%=boardDTO.getReadcount()%></td></tr>
+<tr><td>글제목</td><td colspan="3"><%=boardDTO.getSubject()%></td></tr>
+<tr><td>글내용</td><td colspan="3"><%=boardDTO.getContent()%></td></tr>
+</table>
+
+<div id="table_search">
+<%if(id != null ) {
+	if(id.equals(boardDTO.getName())) {%>
+<input type="button" value="글수정" class="btn" onclick="location.href='update.jsp?num='<%=boardDTO.getNum()%>'">
+<input type="button" value="글삭제" class="btn" onclick="location.href='deleteForm.jsp?num='<%=boardDTO.getNum()%>'">
+<%}
+}%>
+<input type="button" value="글목록" class="btn" onclick="location.href='notice.jsp">
+
 </div>
+
 <div class="clear"></div>
-<div id="page_control">
-<a href="#">Prev</a>
-<a href="#">1</a><a href="#">2</a><a href="#">3</a>
-<a href="#">4</a><a href="#">5</a><a href="#">6</a>
-<a href="#">7</a><a href="#">8</a><a href="#">9</a>
-<a href="#">10</a>
-<a href="#">Next</a>
-</div>
+
 </article>
 <!-- 게시판 -->
 <!-- 본문들어가는 곳 -->

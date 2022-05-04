@@ -2,10 +2,14 @@ package board;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
+
+import member.MemberDTO;
 
 
 
@@ -71,4 +75,96 @@ public class BoardDAO {
 		
 		}//insertBoard
 	
+	// BoardDTO 여러개를 담을수 있는 자바 배열형태의 내장객체 List 리턴값있음
+	public List getBoardList() {
+		// List 객체 생성
+		// 처음에는 10개 기억장소 할당 => 11개 부터 또 다른 10개 기억장소 할당 
+		// List 배열내장객체 값을 저장 .add(DTO) 주소값 순서대로 한칸씩 저장
+		// 값을 가져올때 .get(순서) 배열 한칸 값을 가져오기
+		// 배열 크기 .size()
+		List boardList = new ArrayList();
+		try {
+			// 1, 2 디비연결 메서드 호출
+			con=getConnection();
+			// 3 sql select 게시판 전체 글 가져오기
+			String sql="select * from board order by num desc";
+			pstmt=con.prepareStatement(sql);
+			
+			// 4 실행 => 결과 저장
+			rs=pstmt.executeQuery();
+			// 5 결과 => 다음행 => 데이터 있으면 열접근 => 
+			//			BoardDTO 객체생성 set메서드호출 열데이터 저장
+			//			배열 한칸에 게시판글 BoardDTO주소값을 저장 .add(DTO주소값)
+			while(rs.next()) {
+				BoardDTO boardDTO = new BoardDTO();
+				
+				boardDTO.setNum(rs.getInt("num"));
+				boardDTO.setPass(rs.getString("pass"));
+				boardDTO.setName(rs.getString("name"));
+				boardDTO.setSubject(rs.getString("subject"));
+				boardDTO.setContent(rs.getString("content"));
+				boardDTO.setReadcount(rs.getInt("readcount"));
+				boardDTO.setDate(rs.getTimestamp("date"));
+				
+				System.out.println(boardDTO);
+				
+				
+				
+				
+				
+				boardList.add(boardDTO);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeDB();
+		}
+		// List 배열 내장객체 주소값 리턴
+		return boardList;
+	}//getBoardList
+	public BoardDTO getBoard(int num) {
+		BoardDTO boardDTO = null;
+		try {
+			con=getConnection();
+			// 3 sql select 게시판 전체 글 가져오기
+			String sql="select * from board where num=?";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			rs=pstmt.executeQuery();
+			
+			if(rs.next()) {
+			
+			boardDTO = new BoardDTO();
+			boardDTO.setNum(rs.getInt("num"));
+			boardDTO.setName(rs.getString("name"));
+			boardDTO.setSubject(rs.getString("subject"));
+			boardDTO.setContent(rs.getString("content"));
+			boardDTO.setReadcount(rs.getInt("readcount"));
+			boardDTO.setDate(rs.getTimestamp("date"));
+			
+			
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			closeDB();
+		}
+		return boardDTO;
+	} // getBoard
+	
+	public void updateReadcount(int num) {
+		try {
+			con=getConnection();
+			
+			String sql="update board set readcount = readcount +1 where num=?";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			closeDB();
+		}
+	}// updateReadcount
 }// class

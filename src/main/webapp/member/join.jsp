@@ -97,7 +97,7 @@ var result = null;
 		} else {
 		
 			 window.open("joinIdCheck.jsp?userid=" + document.fr.id.value, "",
-				"width=500, height=300");
+				"width=300, height=200,");
 				}
 		}
 

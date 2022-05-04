@@ -1,6 +1,7 @@
 package board;
 
-import java.security.Timestamp;
+
+import java.sql.Timestamp;
 
 public class BoardDTO {
 	private int num;
@@ -53,4 +54,6 @@ public class BoardDTO {
 	public void setDate(Timestamp date) {
 		this.date = date;
 	}
+	
+
 }

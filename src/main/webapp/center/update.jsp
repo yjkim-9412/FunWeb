@@ -1,6 +1,3 @@
-<%@page import="java.text.DateFormat"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.util.List"%>
 <%@page import="board.BoardDTO"%>
 <%@page import="board.BoardDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -9,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>center/notice.jsp</title>
+<title>center/update.jsp</title>
 <link href="../css/default.css" rel="stylesheet" type="text/css">
 <link href="../css/subpage.css" rel="stylesheet" type="text/css">
 <!--[if lt IE 9]>
@@ -49,54 +46,34 @@
 </nav>
 <!-- 왼쪽메뉴 -->
 <%
-
-
+String id = (String)session.getAttribute("id");
+int num = Integer.parseInt(request.getParameter("num"));
 BoardDAO boardDAO = new BoardDAO();
+BoardDTO boardDTO = boardDAO.getBoard(num);
+boardDTO.getName();
+if(id==null) {
+response.sendRedirect("../member/login.jsp");
 
 
-List boardList=boardDAO.getBoardList();
-
-// 날짜 => 문자열(원하는 포맷) 변경
-SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
-%>
+}%>
 <!-- 게시판 -->
 <article>
-<h1>Notice</h1>
+<h1>Notice Update</h1>
+<form action="updatePro.jsp" method="post">
+<input type="hidden" name="num" value="<%=num%>">
 <table id="notice">
-<tr><th class="tno">No.</th>
-    <th class="ttitle">Title</th>
-    <th class="twrite">Writer</th>
-    <th class="tdate">Date</th>
-    <th class="tread">Read</th></tr>
-    <%
-    for(int i = 0; i < boardList.size(); i++){
-    	// 배열 한칸 데이터 가져올때 get()
-    	BoardDTO boardDTO = (BoardDTO)boardList.get(i);%>
-    	<tr onclick="location.href='content.jsp?num=<%=boardDTO.getNum()%>'"><td><%= boardDTO.getNum()%></td><td class="left"><%= boardDTO.getSubject()%></td>
-        <td></td><td><%=dateFormat.format(boardDTO.getDate())%></td><td><%= boardDTO.getReadcount()%></td></tr>
-   <% }%>
+<tr><td>작성자</td><td><input type="text" name="name" value="<%=id%>" readonly></td></tr>
+<tr><td>제목</td><td><input type="text" name="subject" value="<%=boardDTO.getSubject()%>"></td></tr>
+<tr><td>내용</td>
+    <td><textarea name="content"  rows="10" cols="20" ><%=boardDTO.getContent()%></textarea></td></tr>
 </table>
+
 <div id="table_search">
-<input type="text" name="search" class="input_box">
-<input type="button" value="search" class="btn">
+<input type="submit" value="글수정" class="btn">
 </div>
-<div id="table_search">
-<%
-String id = (String)session.getAttribute("id");
-if (id != null) {
-%>
-<input type="button" value="글쓰기" class="btn" onclick="location.href='write.jsp'">
-<%} %>
-</div>
+</form>
 <div class="clear"></div>
-<div id="page_control">
-<a href="#">Prev</a>
-<a href="#">1</a><a href="#">2</a><a href="#">3</a>
-<a href="#">4</a><a href="#">5</a><a href="#">6</a>
-<a href="#">7</a><a href="#">8</a><a href="#">9</a>
-<a href="#">10</a>
-<a href="#">Next</a>
-</div>
+
 </article>
 <!-- 게시판 -->
 <!-- 본문들어가는 곳 -->
