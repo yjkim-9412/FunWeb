@@ -126,12 +126,15 @@ function sendComment() {
 <script type="text/javascript">
 
 function fn_content() {
-	alert(document.fr.id.value);
-	if(document.fr.id.value==null || document.fr.id.value=="") {
+	
+	if(document.fr.id.value!=null) {
+		return true;
+	} else {
 		alert("로그인후 댓글 작성해주세요");
 		return false;
 	}
 	if(document.fr.comment.value=="") {
+		alert(document.fr.comment.value);
 		alert("댓글내용을 작성해주세요");
 		return false;
 	}
