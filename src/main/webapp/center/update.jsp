@@ -62,14 +62,14 @@ response.sendRedirect("../member/login.jsp");
 <form action="updatePro.jsp" method="post">
 <input type="hidden" name="num" value="<%=num%>">
 <table id="notice">
-<tr><td>작성자</td><td><input type="text" name="name" value="<%=id%>" readonly></td></tr>
-<tr><td>제목</td><td><input type="text" name="subject" value="<%=boardDTO.getSubject()%>"></td></tr>
+<tr><td>작성자</td><td><input type="text" name="name" value="<%=id%>" style="float: left;" readonly ></td></tr>
+<tr><td>제목</td><td><input type="text" name="subject" value="<%=boardDTO.getSubject()%>" style="float: left;"></td></tr>
 <tr><td>내용</td>
-    <td><textarea name="content"  rows="10" cols="20" ><%=boardDTO.getContent()%></textarea></td></tr>
+<td><textarea name="content" rows=10 cols=87 style="resize: none"  ><%=boardDTO.getContent()%></textarea></td></tr>
 </table>
 
 <div id="table_search">
-<input type="submit" value="글수정" class="btn">
+<input type="submit" value="글수정" class="btn" style="cursor: pointer;">
 </div>
 </form>
 <div class="clear"></div>

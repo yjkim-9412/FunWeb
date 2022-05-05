@@ -59,11 +59,13 @@ BoardDAO boardDAO = new BoardDAO();
 // updateReadcount(num) 호출
 
 BoardDTO boardDTO = boardDAO.getBoard(num);
-boardDAO.updateReadcount(num);
+
 MemberDAO memberDAO = new MemberDAO();
 
 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:m");
+
 %>
+
 <article>
 <h1>Notice Write</h1>
 <table id="notice">
@@ -73,19 +75,44 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:m");
     <td>조회수</td><td><%=boardDTO.getReadcount()%></td></tr>
 <tr><td>글제목</td><td colspan="3"><%=boardDTO.getSubject()%></td></tr>
 <tr><td>글내용</td><td colspan="3"><%=boardDTO.getContent()%></td></tr>
-</table>
+</table><br>
 
-<div id="table_search">
-<%if(id != null ) {
-	if(id.equals(boardDTO.getName())) {%>
-<input type="button" value="글수정" class="btn" onclick="location.href='update.jsp?num=<%=boardDTO.getNum()%>'">
-<input type="button" value="글삭제" class="btn" onclick="location.href='deleteForm.jsp?num=<%=boardDTO.getNum()%>'">
-<%}
-}%>
-<input type="button" value="글목록" class="btn" onclick="location.href=notice.jsp">
+<div id="comment">
 
+
+<form name="fr" action="commentPro.jsp" method="post" onsubmit="return fn_content();">
+댓글<br>
+<textarea name="content" rows=5 cols=87 style="resize: none"  readonly></textarea><br> <!-- table로 추후에 변경 --> 
+댓글작성란<br>
+<textarea name="comment" rows=5 cols=87 style="resize: none"></textarea>
+<input type="hidden" name="num" value="<%=boardDTO.getNum()%>">
+<input type="hidden" name="id" value="<%=id%>">
+
+<input type="submit" value="댓글작성" class="btn" style="cursor: pointer;">
+
+
+</form>
 </div>
 
+
+
+<div id="table_search">
+<%if(id != null ) {%>
+	
+	<%if(id.equals(boardDTO.getName())) {%>
+<input type="button" value="글수정" class="btn" style="cursor: pointer;" onclick="location.href='update.jsp?num=<%=boardDTO.getNum()%>'">
+<input type="button" value="글삭제" class="btn" style="cursor: pointer;" onclick="location.href='deleteForm.jsp?num=<%=boardDTO.getNum()%>'">
+
+<%}
+}%>
+<input type="button" value="글목록" class="btn" onclick="location.href=notice.jsp" style="cursor: pointer;">
+
+</div>
+<script type="text/javascript">
+function sendComment() {
+	location.href("commentPro.jsp")
+}
+</script>
 <div class="clear"></div>
 
 </article>
@@ -96,5 +123,20 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:m");
 <jsp:include page="../inc/bottom.jsp"></jsp:include>
 <!-- 푸터들어가는 곳 -->
 </div>
+<script type="text/javascript">
+
+function fn_content() {
+	alert(document.fr.id.value);
+	if(document.fr.id.value==null || document.fr.id.value=="") {
+		alert("로그인후 댓글 작성해주세요");
+		return false;
+	}
+	if(document.fr.comment.value=="") {
+		alert("댓글내용을 작성해주세요");
+		return false;
+	}
+	return true;
+}
+</script>
 </body>
 </html>

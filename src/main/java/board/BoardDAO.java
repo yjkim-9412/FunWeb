@@ -186,5 +186,6 @@ public class BoardDAO {
 		} finally {
 			closeDB();
 		}
-	}
+	}// updateBoard
+	
 }// class

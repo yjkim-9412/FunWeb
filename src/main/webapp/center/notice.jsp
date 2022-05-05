@@ -65,27 +65,26 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
 <table id="notice">
 <tr><th class="tno">No.</th>
     <th class="ttitle">Title</th>
-    <th class="twrite">Writer</th>
-    <th class="tdate">Date</th>
-    <th class="tread">Read</th></tr>
+    <th class="twrite" style="font-size: 8pt">작성자</th>
+    <th class="tdate" style="font-size: 8pt">작성날짜</th>
+    <th class="tread" style="font-size: 8pt" >조회수</th></tr>
     <%
     for(int i = 0; i < boardList.size(); i++){
     	// 배열 한칸 데이터 가져올때 get()
     	BoardDTO boardDTO = (BoardDTO)boardList.get(i);%>
-    	<tr onclick="location.href='content.jsp?num=<%=boardDTO.getNum()%>'"><td><%= boardDTO.getNum()%></td><td class="left"><%= boardDTO.getSubject()%></td>
+    	<tr onclick="location.href='content.jsp?num=<%=boardDTO.getNum()%>'" style="cursor: pointer;"><td><%= boardDTO.getNum()%></td><td class="left"><%= boardDTO.getSubject()%></td>
         <td></td><td><%=dateFormat.format(boardDTO.getDate())%></td><td><%= boardDTO.getReadcount()%></td></tr>
    <% }%>
 </table>
 <div id="table_search">
 <input type="text" name="search" class="input_box">
-<input type="button" value="search" class="btn">
-</div>
-<div id="table_search">
+<input type="button" value="글검색" class="btn" style="cursor: pointer;">
+
 <%
 String id = (String)session.getAttribute("id");
 if (id != null) {
 %>
-<input type="button" value="글쓰기" class="btn" onclick="location.href='write.jsp'">
+<input type="button" value="글쓰기" class="btn" onclick="location.href='write.jsp'" style="cursor: pointer;">
 <%} %>
 </div>
 <div class="clear"></div>

@@ -191,5 +191,10 @@ color: #fff;
 배경이미지 images/member/cancel_back.jpg
 repeat-x center center*/
 
-
+textarea #content {
+	width: 100%;
+    height: 6.25em;
+    border: none;
+    resize: none;
+}
 

@@ -168,7 +168,7 @@ var result = null;
 <!-- 본문내용 -->
 <article>
 <h1>회원가입</h1>
-<form action="joinPro.jsp" name="fr" id="join" method="get" onsubmit="return fn_Checkpass();">
+<form action="joinPro.jsp" name="fr" id="join" method="post" onsubmit="return fn_Checkpass();">
 <fieldset>
 <legend>기본정보</legend>
 <label>ID</label>

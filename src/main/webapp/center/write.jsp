@@ -56,14 +56,14 @@ response.sendRedirect("../member/login.jsp");
 <form action="writePro.jsp" method="post">
 <input type="hidden" name="pass" value="1111">
 <table id="notice">
-<tr><td>작성자</td><td><input type="text" name="name" value="<%=id%>" readonly></td></tr>
-<tr><td>제목</td><td><input type="text" name="subject"></td></tr>
+<tr><td>작성자</td><td><input type="text" name="name" value="<%=id%>" readonly style="float: left;" readonly ></td></tr>
+<tr><td>제목</td><td><input type="text" name="subject" readonly style="float: left;"></td></tr>
 <tr><td>내용</td>
     <td><textarea name="content" rows="10" cols="20"></textarea></td></tr>
 </table>
 
 <div id="table_search">
-<input type="submit" value="글쓰기" class="btn">
+<input type="submit" value="글쓰기" class="btn" style="cursor: pointer;">
 </div>
 </form>
 <div class="clear"></div>
