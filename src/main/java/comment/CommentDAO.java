@@ -1,4 +1,4 @@
-package comment;
+ package comment;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +9,7 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 public class CommentDAO {
-	public class BoardDAO {
+	
 		
 		Connection con=null;
 		PreparedStatement pstmt=null;
@@ -28,5 +28,27 @@ public class CommentDAO {
 			if(pstmt!=null) try { pstmt.close(); } catch (Exception e2) {	}
 			if(con!=null) try { con.close(); } catch (Exception e2) {	}	
 		}
-	}
+	
+	public void insertComment(CommentDTO commentDTO) {
+		
+		try {
+			
+			con=getConnection();
+			String sql = "insert into comment (num, id, name, comment, date) value(?,?,?,?,now())";
+			pstmt=con.prepareStatement(sql);
+			
+			pstmt.setInt(1, commentDTO.getNum());
+			pstmt.setString(2, commentDTO.getId());
+			pstmt.setString(3, commentDTO.getName());
+			pstmt.setString(4, commentDTO.getComment());
+			
+			pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeDB();
+		}
+		
+	} // insertComment
 }

@@ -49,8 +49,10 @@
 <!-- 왼쪽메뉴 -->
 <!-- 게시판 -->
 <%
+request.setCharacterEncoding("utf-8");
 String id = (String)session.getAttribute("id");
 int num = Integer.parseInt(request.getParameter("num"));
+
 BoardDAO boardDAO = new BoardDAO();
 
 //게시판 글 조회수 증가
@@ -59,7 +61,7 @@ BoardDAO boardDAO = new BoardDAO();
 // updateReadcount(num) 호출
 
 BoardDTO boardDTO = boardDAO.getBoard(num);
-
+boardDAO.updateReadcount(num);
 MemberDAO memberDAO = new MemberDAO();
 
 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:m");
@@ -108,11 +110,6 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:m");
 <input type="button" value="글목록" class="btn" onclick="location.href=notice.jsp" style="cursor: pointer;">
 
 </div>
-<script type="text/javascript">
-function sendComment() {
-	location.href("commentPro.jsp")
-}
-</script>
 <div class="clear"></div>
 
 </article>
@@ -127,7 +124,7 @@ function sendComment() {
 
 function fn_content() {
 	if(document.fr.comment.value=="") {
-		alert(document.fr.comment.value);
+		
 		alert("댓글내용을 작성해주세요");
 		return false;
 	}
