@@ -1,3 +1,5 @@
+<%@page import="comment.CommentDTO"%>
+<%@page import="comment.CommentDAO"%>
 <%@page import="member.MemberDAO"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="board.BoardDTO"%>
@@ -62,7 +64,10 @@ BoardDAO boardDAO = new BoardDAO();
 
 BoardDTO boardDTO = boardDAO.getBoard(num);
 boardDAO.updateReadcount(num);
-MemberDAO memberDAO = new MemberDAO();
+
+CommentDAO commentDAO = new CommentDAO();
+
+List commentList=commentDAO.getCommentList();
 
 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:m");
 
@@ -83,15 +88,26 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:m");
 
 
 <form name="fr" action="commentPro.jsp" method="post" onsubmit="return fn_content();">
-댓글<br>
-<textarea name="content" rows=5 cols=87 style="resize: none"  readonly></textarea><br> <!-- table로 추후에 변경 --> 
+댓글목록<br>
+<fieldset><!-- table로 추후에 변경 --> 
+<table id="notice">
+<%try{
+    for(int i = 0; i < commentList.size(); i++){
+    	// 배열 한칸 데이터 가져올때 get()
+    	CommentDTO commentDTO = (CommentDTO)commentList.get(i);%>
+    	<tr><td><%=commentDTO.getComment_num()%></td><td class="left"><%=commentDTO.getName() %></td>
+        <td></td><td><%=commentDTO.getComment()%></td>
+        <td><%if(id == commentDTO.getId())%><input type="button" name="commentD" value="댓글삭제" onclick="deleteCommentPro.jsp?"></td></tr><%}%>
+   <% } catch (Exception e) {
+   			e.printStackTrace();}%>
+</table>
 댓글작성란<br>
 <textarea name="comment" rows=5 cols=87 style="resize: none"></textarea>
 <input type="hidden" name="num" value="<%=boardDTO.getNum()%>">
 <input type="hidden" name="id" value="<%=id%>">
 
 <input type="submit" value="댓글작성" class="btn" style="cursor: pointer;">
-
+</fieldset>
 
 </form>
 </div>

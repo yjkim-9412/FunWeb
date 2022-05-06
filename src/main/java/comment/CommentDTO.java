@@ -8,6 +8,8 @@ public class CommentDTO {
 	private String id;
 	private String name;
 	private String comment;
+	private int comment_num;
+	
 	private Timestamp date;
 	
 	public int getNum() {
@@ -41,6 +43,12 @@ public class CommentDTO {
 	}
 	public void setDate(Timestamp date) {
 		this.date = date;
+	}
+	public int getComment_num() {
+		return comment_num;
+	}
+	public void setComment_num(int comment_num) {
+		this.comment_num = comment_num;
 	}
 	
 

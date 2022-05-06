@@ -3,10 +3,15 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
+
+import board.BoardDAO;
+import board.BoardDTO;
 
 public class CommentDAO {
 	
@@ -29,26 +34,102 @@ public class CommentDAO {
 			if(con!=null) try { con.close(); } catch (Exception e2) {	}	
 		}
 	
-	public void insertComment(CommentDTO commentDTO) {
-		
-		try {
+		public void insertComment(CommentDTO commentDTO) {
+			BoardDAO boardDAO = new BoardDAO();
+			BoardDTO boardDTO = boardDAO.getBoard(commentDTO.getNum());
+			System.out.println(boardDTO.getNum());
+			System.out.println(commentDTO.getNum());
+			if(commentDTO.getNum() == boardDTO.getNum()) {
+			
+				try {
 			
 			con=getConnection();
-			String sql = "insert into comment (num, id, name, comment, date) value(?,?,?,?,now())";
-			pstmt=con.prepareStatement(sql);
+			int num=0;
+			String sql="select max(comment_num) from comment";
 			
+			pstmt=con.prepareStatement(sql);
+			// 4단계 실행 => 실행결과 저장
+			
+			rs=pstmt.executeQuery();
+			// 5단계 결과 행접근 
+			if(rs.next()){
+				// 가장 큰번호 +1
+				num=rs.getInt("max(comment_num)")+1;
+			}
+			sql="insert into comment(num, id, name, comment_cot, comment_num, date) values(?,?,?,?,?,now())";
+			
+			
+			pstmt=con.prepareStatement(sql);
 			pstmt.setInt(1, commentDTO.getNum());
 			pstmt.setString(2, commentDTO.getId());
 			pstmt.setString(3, commentDTO.getName());
 			pstmt.setString(4, commentDTO.getComment());
+			pstmt.setInt(5, num);
+			
+			
+
 			
 			pstmt.executeUpdate();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			closeDB();
-		}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}finally {
+				closeDB();
+			}
+			}else {
+				System.out.println("ERROR");
+			}
+		}//insertComment
 		
-	} // insertComment
-}
+		public List getCommentList() {
+			// List 객체 생성
+			// 처음에는 10개 기억장소 할당 => 11개 부터 또 다른 10개 기억장소 할당 
+			// List 배열내장객체 값을 저장 .add(DTO) 주소값 순서대로 한칸씩 저장
+			// 값을 가져올때 .get(순서) 배열 한칸 값을 가져오기
+			// 배열 크기 .size()
+			List commentList = new ArrayList();
+			
+			try {
+				// 1, 2 디비연결 메서드 호출
+				con=getConnection();
+				// 3 sql select 게시판 전체 글 가져오기
+				String sql="select * from comment order by comment_num desc";
+				pstmt=con.prepareStatement(sql);
+				
+				// 4 실행 => 결과 저장
+				rs=pstmt.executeQuery();
+				// 5 결과 => 다음행 => 데이터 있으면 열접근 => 
+				//			BoardDTO 객체생성 set메서드호출 열데이터 저장
+				//			배열 한칸에 게시판글 BoardDTO주소값을 저장 .add(DTO주소값)
+				while(rs.next()) {
+					CommentDTO commentDTO = new CommentDTO();
+					
+					commentDTO.setNum(rs.getInt("num"));
+					commentDTO.setId(rs.getString("id"));
+					commentDTO.setName(rs.getString("name"));										
+					commentDTO.setComment(rs.getString("comment_cot"));
+					commentDTO.setDate(rs.getTimestamp("date"));
+					
+					
+					System.out.println(commentDTO);
+					
+					
+					
+					
+					
+					commentList.add(commentDTO);
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				closeDB();
+			}
+			// List 배열 내장객체 주소값 리턴
+			return commentList;
+		}//getBoardList
+		
+			
+			
+			
+	
+}//comment class
