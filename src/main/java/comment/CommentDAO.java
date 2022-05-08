@@ -137,13 +137,41 @@ public class CommentDAO {
 				
 				
 				pstmt.setInt(1, comment_num);
-				pstmt.executeUpdate();
 				
+				pstmt.executeUpdate();
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
 				closeDB();
 			}
+		}// deleteComment
+		
+		public CommentDTO getComment(int comment_num) {
+			CommentDTO commentDTO = null;
+			try {
+				
+				con=getConnection();
+				String sql="select * from comment where comment_num=?";
+				pstmt=con.prepareStatement(sql);
+				
+				pstmt.setInt(1, comment_num);
+				rs=pstmt.executeQuery();
+				if(rs.next()) {
+					commentDTO = new CommentDTO();
+					commentDTO.setComment(rs.getString("comment"));
+					commentDTO.setComment_num(rs.getInt("comment_num"));
+					commentDTO.setId(rs.getString("id"));
+					commentDTO.setName(rs.getString("name"));
+					commentDTO.setNum(rs.getInt("num"));
+					commentDTO.setDate(rs.getTimestamp("date"));
+					
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}finally {
+				closeDB();
+			}
+			return commentDTO;
 		}
 		
 			

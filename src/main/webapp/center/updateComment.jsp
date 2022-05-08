@@ -11,7 +11,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>center/content.jsp</title>
+<title>center/updateCommnet.jsp</title>
 <link href="../css/default.css" rel="stylesheet" type="text/css">
 <link href="../css/subpage.css" rel="stylesheet" type="text/css">
 <!--[if lt IE 9]>
@@ -55,21 +55,19 @@
 request.setCharacterEncoding("utf-8");
 String id = (String)session.getAttribute("id");
 int num = Integer.parseInt(request.getParameter("num"));
-
-BoardDAO boardDAO = new BoardDAO();
-
-//게시판 글 조회수 증가
-// 리턴할형 없음 updateReadcount(int num) 메서드
-// update board set readcount = readcount +1 where num=?
-// updateReadcount(num) 호출
-
-BoardDTO boardDTO = boardDAO.getBoard(num);
-boardDAO.updateReadcount(num);
+int comment_num = Integer.parseInt(request.getParameter("comment_num"));
 
 CommentDAO commentDAO = new CommentDAO();
+CommentDTO commentDTO = commentDAO.getComment(comment_num);
+
+
+BoardDAO boardDAO = new BoardDAO();
+BoardDTO boardDTO = boardDAO.getBoard(num);
+
+
 
 boardDTO.setNum(num);
-List commentList=commentDAO.getCommentList(boardDTO);
+
 
 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 
@@ -92,44 +90,25 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 
 
 <!-- table로 추후에 변경 --> 
-<fieldset>
+
 댓글목록<br>
 <table id="notice" style="width: 100%">
-<%try{
-    for(int i = 0; i < commentList.size(); i++){
-    	// 배열 한칸 데이터 가져올때 get()
-    	CommentDTO commentDTO = (CommentDTO)commentList.get(i);%>
+
     	
-    	<tr><td class="left"><%=commentDTO.getName() %></td>
-        <td colspan="2"><%=commentDTO.getComment()%></td><td></td>
-        <td>작성일자: <%=dateFormat.format(commentDTO.getDate())%></td>
-        <td><%if(id.equals(commentDTO.getId())){%>
-        <form action="deleteCommentPro.jsp" name="deleteComment" method="get" onsubmit="return fn_deletecomment();">
+    	<tr><td class="left"><%=commentDTO.getName()%><%=commentDTO.getId()%></td>
+        <td colspan="2"><textarea name="comment" rows="4" cols="60"></textarea></td>
+        <td><form action="updateCommentPro.jsp" name="updateComment" method="post" onsubmit="return fn_updatecomment();">
         <input type="hidden" name="comment_num" value="<%=commentDTO.getComment_num()%>">
         <input type="hidden" name="num" value="<%=boardDTO.getNum()%>">
-        <input type="submit" value="댓글삭제" style="cursor: pointer; float: left;">
-        <input type="button" name="commentUpate" value="댓글수정" onclick="return fn_updateComment(this.form);" style="float: left;"><%}%></td>
-        </form>
         
+        <input type="submit" value="등록" style="cursor: pointer; float: left;">
+        </form>
+        <input type="button" name=cancle value="취소" onclick="fn_cancle()" style="float: left;"></td>
         </tr>
-        <%}
-    } catch (Exception e) {
-   			e.printStackTrace();}%>
+        
+    
 </table>
 
-</fieldset>
-<form name="fr" action="commentPro.jsp" method="post" onsubmit="return fn_content();">
-<fieldset>
-댓글작성란<br>
-<textarea name="comment" rows=5 cols=87 style="resize: none"></textarea>
-<input type="hidden" name="num" value="<%=boardDTO.getNum()%>">
-<input type="hidden" name="id" value="<%=id%>">
-
-
-<input type="submit" value="댓글작성" class="btn" style="cursor: pointer;">
-</fieldset>
-
-</form>
 </div>
 
 
@@ -141,7 +120,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 <input type="button" value="글수정" class="btn" style="cursor: pointer;" onclick="location.href='update.jsp?num=<%=boardDTO.getNum()%>'">
 <input type="button" value="글삭제" class="btn" style="cursor: pointer;" onclick="location.href='deleteForm.jsp?num=<%=boardDTO.getNum()%>'">
 
-<%}
+<% }
 }%>
 <input type="button" value="글목록" class="btn" onclick="location.href=notice.jsp" style="cursor: pointer;">
 
@@ -172,19 +151,9 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 			return true;
 		}
 	}//fn_content()
-	function fn_deletecomment() {
-			if(confirm("정말 삭제하시겠습니까?") == true) {
-				
-				return true;
-			}else {
-				
-				return false;
-			}
-	}//fn_deletecomment()
-	function fn_updateComment(fn) {
-		fn.action="updateComment.jsp"; 
-	    fn.submit();
-	    return true;
+	
+	function fn_cancle() {
+		history.back();
 	}
 	
 
