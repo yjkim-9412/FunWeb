@@ -1,3 +1,4 @@
+<%@page import="java.util.List"%>
 <%@page import="comment.CommentDTO"%>
 <%@page import="comment.CommentDAO"%>
 <%@page import="member.MemberDAO"%>
@@ -67,9 +68,10 @@ boardDAO.updateReadcount(num);
 
 CommentDAO commentDAO = new CommentDAO();
 
-List commentList=commentDAO.getCommentList();
+boardDTO.setNum(num);
+List commentList=commentDAO.getCommentList(boardDTO);
 
-SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:m");
+SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 
 %>
 
@@ -87,24 +89,41 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:m");
 <div id="comment">
 
 
-<form name="fr" action="commentPro.jsp" method="post" onsubmit="return fn_content();">
+
+
+<!-- table로 추후에 변경 --> 
+<fieldset>
 댓글목록<br>
-<fieldset><!-- table로 추후에 변경 --> 
-<table id="notice">
+<table id="notice" style="width: 100%">
 <%try{
     for(int i = 0; i < commentList.size(); i++){
     	// 배열 한칸 데이터 가져올때 get()
     	CommentDTO commentDTO = (CommentDTO)commentList.get(i);%>
-    	<tr><td><%=commentDTO.getComment_num()%></td><td class="left"><%=commentDTO.getName() %></td>
-        <td></td><td><%=commentDTO.getComment()%></td>
-        <td><%if(id == commentDTO.getId())%><input type="button" name="commentD" value="댓글삭제" onclick="deleteCommentPro.jsp?"></td></tr><%}%>
-   <% } catch (Exception e) {
+    	
+    	<tr><td class="left"><%=commentDTO.getName() %></td>
+        <td colspan="2"><%=commentDTO.getComment()%></td><td></td>
+        <td>작성일자: <%=dateFormat.format(commentDTO.getDate())%></td>
+        <td><%if(id.equals(commentDTO.getId())){%>
+        <form action="deleteCommentPro.jsp" name="deleteComment" method="post" onsubmit="return fn_deletecomment();">
+        <input type="hidden" name="comment_num" value="<%=commentDTO.getComment_num()%>">
+        <input type="hidden" name="num" value="<%=boardDTO.getNum()%>">
+        <input type="submit" value="댓글삭제" style="cursor: pointer; float: left;">
+        </form>
+        <input type="button" name="commentUpate" value="댓글수정" onclick="updateComment.jsp?" style="float: left;"><%}%></td>
+        </tr>
+        <%}
+    } catch (Exception e) {
    			e.printStackTrace();}%>
 </table>
+
+</fieldset>
+<form name="fr" action="commentPro.jsp" method="post" onsubmit="return fn_content();">
+<fieldset>
 댓글작성란<br>
 <textarea name="comment" rows=5 cols=87 style="resize: none"></textarea>
 <input type="hidden" name="num" value="<%=boardDTO.getNum()%>">
 <input type="hidden" name="id" value="<%=id%>">
+
 
 <input type="submit" value="댓글작성" class="btn" style="cursor: pointer;">
 </fieldset>
@@ -138,22 +157,31 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:m");
 </div>
 <script type="text/javascript">
 
-function fn_content() {
-	if(document.fr.comment.value=="") {
-		
-		alert("댓글내용을 작성해주세요");
-		return false;
-	}
-	if(document.fr.id.value=="null" || document.fr.id.value=="") {
-		alert("로그인후 댓글 작성해주세요");
-		location.href="../member/login.jsp";
-		return false;
-	} else {
-		return true;
-	}
+	function fn_content() {
+		if(document.fr.comment.value=="") {
+			
+			alert("댓글내용을 작성해주세요");
+			return false;
+		}
+		if(document.fr.id.value=="null" || document.fr.id.value=="") {
+			alert("로그인후 댓글 작성해주세요");
+			location.href="../member/login.jsp";
+			return false;
+		} else {
+			return true;
+		}
+	}//fn_content()
+	function fn_deletecomment() {
+			if(confirm("정말 삭제하시겠습니까?") == true) {
+				
+				return true;
+			}else {
+				
+				return false;
+			}
+	}//fn_deletecomment()
 	
-	
-}
+
 </script>
 </body>
 </html>

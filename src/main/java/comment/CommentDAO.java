@@ -39,7 +39,7 @@ public class CommentDAO {
 			BoardDTO boardDTO = boardDAO.getBoard(commentDTO.getNum());
 			System.out.println(boardDTO.getNum());
 			System.out.println(commentDTO.getNum());
-			if(commentDTO.getNum() == boardDTO.getNum()) {
+			
 			
 				try {
 			
@@ -60,7 +60,7 @@ public class CommentDAO {
 			
 			
 			pstmt=con.prepareStatement(sql);
-			pstmt.setInt(1, commentDTO.getNum());
+			pstmt.setInt(1, boardDTO.getNum());
 			pstmt.setString(2, commentDTO.getId());
 			pstmt.setString(3, commentDTO.getName());
 			pstmt.setString(4, commentDTO.getComment());
@@ -75,12 +75,10 @@ public class CommentDAO {
 			}finally {
 				closeDB();
 			}
-			}else {
-				System.out.println("ERROR");
-			}
+			
 		}//insertComment
 		
-		public List getCommentList() {
+		public List getCommentList(BoardDTO boardDTO) {
 			// List 객체 생성
 			// 처음에는 10개 기억장소 할당 => 11개 부터 또 다른 10개 기억장소 할당 
 			// List 배열내장객체 값을 저장 .add(DTO) 주소값 순서대로 한칸씩 저장
@@ -92,9 +90,9 @@ public class CommentDAO {
 				// 1, 2 디비연결 메서드 호출
 				con=getConnection();
 				// 3 sql select 게시판 전체 글 가져오기
-				String sql="select * from comment order by comment_num desc";
+				String sql="select * from comment where num=? order by comment_num";
 				pstmt=con.prepareStatement(sql);
-				
+				pstmt.setInt(1, boardDTO.getNum());
 				// 4 실행 => 결과 저장
 				rs=pstmt.executeQuery();
 				// 5 결과 => 다음행 => 데이터 있으면 열접근 => 
@@ -108,6 +106,7 @@ public class CommentDAO {
 					commentDTO.setName(rs.getString("name"));										
 					commentDTO.setComment(rs.getString("comment_cot"));
 					commentDTO.setDate(rs.getTimestamp("date"));
+					commentDTO.setComment_num(rs.getInt("comment_num"));
 					
 					
 					System.out.println(commentDTO);
@@ -127,6 +126,25 @@ public class CommentDAO {
 			// List 배열 내장객체 주소값 리턴
 			return commentList;
 		}//getBoardList
+		
+		public void deleteComment(int comment_num) {
+			
+			try {
+				con=getConnection();
+				
+				String sql = "delete from comment where comment_num=? ";
+				pstmt=con.prepareStatement(sql);
+				
+				
+				pstmt.setInt(1, comment_num);
+				pstmt.executeUpdate();
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				closeDB();
+			}
+		}
 		
 			
 			
