@@ -18,7 +18,7 @@ String id = (String)session.getAttribute("id");
 
 String comment = request.getParameter("comment");
 int num = Integer.parseInt(request.getParameter("num"));
-
+out.print(comment);
 
 MemberDAO memberDAO = new MemberDAO();
 MemberDTO memberDTO = memberDAO.getMember(id);
@@ -33,7 +33,7 @@ commentDTO.setName(memberDTO.getName());
 commentDTO.setComment(comment);
 
 commentDAO.insertComment(commentDTO);
-response.sendRedirect("content.jsp?num="+ num);
+// response.sendRedirect("content.jsp?num="+ num);
 
 %>
 <script type="text/javascript">

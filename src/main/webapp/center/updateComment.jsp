@@ -103,7 +103,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
         <input type="hidden" name="num" value="<%=boardDTO.getNum()%>"></td>
         
         <td><input type="submit" value="등록" style="cursor: pointer; float: left;">
-        </form>
+        
         <input type="button" name=cancle value="취소" onclick="fn_cancle()" style="float: left;"></td>
         </tr>
         
@@ -139,12 +139,12 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 <script type="text/javascript">
 
 	function fn_content() {
-		if(document.fr.comment.value=="") {
+		if(document.updateComment.comment.value=="" || document.updateComment.comment.value==null) {
 			
 			alert("댓글내용을 작성해주세요");
 			return false;
 		}
-		if(document.fr.id.value=="null" || document.fr.id.value=="") {
+		if(document.id.value=="null" || document.id.value=="") {
 			alert("로그인후 댓글 작성해주세요");
 			location.href="../member/login.jsp";
 			return false;

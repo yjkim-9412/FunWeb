@@ -79,7 +79,7 @@ public class CommentDAO {
 			
 		}//insertComment
 		
-		public List getCommentList(BoardDTO boardDTO) {
+		public List<CommentDTO> getCommentList(BoardDTO boardDTO) {
 			// List 객체 생성
 			// 처음에는 10개 기억장소 할당 => 11개 부터 또 다른 10개 기억장소 할당 
 			// List 배열내장객체 값을 저장 .add(DTO) 주소값 순서대로 한칸씩 저장
@@ -191,6 +191,30 @@ public class CommentDAO {
 				closeDB();
 			}
 		}// updateComment
+		
+		public int getCommentCount(int num) {
+			int countComment = 0;
+			
+			try {
+				con=getConnection();
+				String sql = "select count(*) from comment where num=?";
+				pstmt=con.prepareStatement(sql);
+				pstmt.setInt(1, num);
+				
+				rs=pstmt.executeQuery();
+				
+				
+				if(rs.next()) {
+				
+					countComment=rs.getInt("count(*)");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}finally {
+				closeDB();
+			}
+			return countComment;
+		}
 		
 			
 			

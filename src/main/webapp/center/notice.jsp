@@ -1,3 +1,5 @@
+<%@page import="comment.CommentDTO"%>
+<%@page import="comment.CommentDAO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -50,9 +52,11 @@
 </nav>
 <!-- 왼쪽메뉴 -->
 <%
-
+CommentDAO commentDAO = new CommentDAO();
+CommentDTO commetDTO;
 
 BoardDAO boardDAO = new BoardDAO();
+
 
 // 모든형을 배열에 저장 => 업캐스팅 데이터 저장
 
@@ -99,13 +103,16 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
     <th class="twrite" style="font-size: 8pt">작성자</th>
     <th class="tdate" style="font-size: 8pt">작성날짜</th>
     <th class="tread" style="font-size: 8pt" >조회수</th></tr>
-    <%
+    <%int countComment;
     for(int i = 0; i < boardList.size(); i++){
     	// 배열 한칸 데이터 가져올때 get()
     	BoardDTO boardDTO = boardList.get(i);%>
-    	<tr onclick="location.href='content.jsp?num=<%=boardDTO.getNum()%>'" style="cursor: pointer;"><td><%= boardDTO.getNum()%></td><td class="left"><%= boardDTO.getSubject()%></td>
+    	<tr onclick="location.href='content.jsp?num=<%=boardDTO.getNum()%>'" style="cursor: pointer;"><td><%= boardDTO.getNum()%></td>
+    	 <%countComment = commentDAO.getCommentCount(boardDTO.getNum());%>
+    	<td class="left"><%= boardDTO.getSubject()%> (<%=countComment%>)</td>
         <td></td><td><%=dateFormat.format(boardDTO.getDate())%></td><td><%= boardDTO.getReadcount()%></td></tr>
-   <% }%>
+        
+   <% countComment = 0;}%>
 </table>
 <div id="table_search">
 <input type="text" name="search" class="input_box">
