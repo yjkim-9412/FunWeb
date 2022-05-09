@@ -64,6 +64,7 @@ public class CommentDAO {
 			pstmt.setString(2, commentDTO.getId());
 			pstmt.setString(3, commentDTO.getName());
 			pstmt.setString(4, commentDTO.getComment());
+			pstmt.setInt(5, commentDTO.getComment_num());
 			pstmt.setInt(5, num);
 			
 			
@@ -158,7 +159,7 @@ public class CommentDAO {
 				rs=pstmt.executeQuery();
 				if(rs.next()) {
 					commentDTO = new CommentDTO();
-					commentDTO.setComment(rs.getString("comment"));
+					commentDTO.setComment(rs.getString("comment_cot"));
 					commentDTO.setComment_num(rs.getInt("comment_num"));
 					commentDTO.setId(rs.getString("id"));
 					commentDTO.setName(rs.getString("name"));
@@ -172,7 +173,24 @@ public class CommentDAO {
 				closeDB();
 			}
 			return commentDTO;
-		}
+		}//getComment
+		
+		public void updateComment(CommentDTO commentDTO) {
+			try {
+				con=getConnection();
+				String sql = "update from comment set comment_cot=? where comment_num=?";
+				pstmt=con.prepareStatement(sql);
+				pstmt.setString(1, commentDTO.getComment());
+				pstmt.setInt(2, commentDTO.getComment_num());
+				
+				pstmt.executeUpdate();
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}finally {
+				closeDB();
+			}
+		}// updateComment
 		
 			
 			

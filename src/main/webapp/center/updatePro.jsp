@@ -16,12 +16,13 @@ String subject = request.getParameter("subject");
 String content = request.getParameter("content");
 
 BoardDTO boardDTO = new BoardDTO();
-boardDTO.setName("name");
-boardDTO.setSubject("subject");
-boardDTO.setContent("content");
+boardDTO.setName(name);
+boardDTO.setNum(num);
+boardDTO.setSubject(subject);
+boardDTO.setContent(content);
 
 BoardDAO boardDAO = new BoardDAO();
-boardDAO.updateBoard(num);
+boardDAO.updateBoard(boardDTO);
 
 response.sendRedirect("notice.jsp");
 %>

@@ -1,3 +1,4 @@
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.List"%>
@@ -53,8 +54,38 @@
 
 BoardDAO boardDAO = new BoardDAO();
 
+// 모든형을 배열에 저장 => 업캐스팅 데이터 저장
 
-List boardList=boardDAO.getBoardList();
+// 한페이지에 보여줄 글개수 지정
+int pageSize=3;
+// 페이지 번호 가져오기
+
+String pageNum = request.getParameter("pageNum");
+//페이지 번호가 없으면 "1"페이지 지정
+if(pageNum == null) {
+	pageNum="1";
+}
+// pageNum pageSize 조합해서 => startRow 시작하는 행번호  => 식(알고리즘)
+// PageNum => 문자열 정수형 변경
+int currentPage = Integer.parseInt(pageNum);
+// pageNum pageSize => startRow
+// 1		10		=>	 	=> (1-1) * 10 + 1=> 0 + 1=>1
+// 2		10		=>		=> (2-1) * 10 + 1=> 10 + 1=>11
+// 3		10		=>		=> (3-1) * 10 + 1=> 20 + 1=>21
+int startRow = (currentPage - 1) * pageSize + 1;
+
+//startRow pageSize 조합해서 => endRow 끝나는 행번호 구하기
+// 	1		10					10
+//	11		10					20
+//	21		10					30
+
+int endRow = startRow + pageSize - 1;
+
+// List boardList=boardDAO.getBoardList();
+
+//BoardDTO형만 배열에 저장
+// List<BoardDTO> boardList=boardDAO.getBoardList(startRow, pageSize);
+List<BoardDTO> boardList=boardDAO.getBoardList(startRow, pageSize);
 
 // 날짜 => 문자열(원하는 포맷) 변경
 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
@@ -71,7 +102,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
     <%
     for(int i = 0; i < boardList.size(); i++){
     	// 배열 한칸 데이터 가져올때 get()
-    	BoardDTO boardDTO = (BoardDTO)boardList.get(i);%>
+    	BoardDTO boardDTO = boardList.get(i);%>
     	<tr onclick="location.href='content.jsp?num=<%=boardDTO.getNum()%>'" style="cursor: pointer;"><td><%= boardDTO.getNum()%></td><td class="left"><%= boardDTO.getSubject()%></td>
         <td></td><td><%=dateFormat.format(boardDTO.getDate())%></td><td><%= boardDTO.getReadcount()%></td></tr>
    <% }%>
@@ -89,12 +120,58 @@ if (id != null) {
 </div>
 <div class="clear"></div>
 <div id="page_control">
-<a href="#">Prev</a>
-<a href="#">1</a><a href="#">2</a><a href="#">3</a>
-<a href="#">4</a><a href="#">5</a><a href="#">6</a>
-<a href="#">7</a><a href="#">8</a><a href="#">9</a>
-<a href="#">10</a>
-<a href="#">Next</a>
+<%
+// 1 ~ 10 11~ 20 페이지번호 구하기
+// 한화면 보여줄 페이지개수 설정
+int pageBlock=3;
+
+//시작하는 페이지 번호
+// pageNum(currentPage) pageBlock => startPage
+// 		1~10(0~9)			10		=>	0*10 + 1 => 1
+//		11~20(10~19)		10		=>	1*10 + 1 =>11
+//		21~30(20~29)		10		=>	2*10 + 1 =>21
+int startPage = (currentPage-1) / pageBlock * pageBlock+1; 
+//끝나는 페이지 번호
+int endPage = startPage + pageSize - 1;
+
+
+
+// 구한 끝나는 페이지번호 10, 실제 페이지 번호 2
+// 글개수 구하기
+
+// 전체페이지 개수 구하기 글개수 50 , 한화면에 보여줄 글개수 10 => 페이지개수 5 + 0 => 5
+// 전체페이지 개수 구하기 글개수 50 , 한화면에 보여줄 글개수 10 => 페이지개수 5 + 1 => 6
+// int PageCount=글개수/pageSize + (글개수%pageSize==0?0:1);
+int count = boardDAO.getboardCount();
+
+int pageCount = count/pageSize + (count%pageSize==0?0:1);
+if(endPage > pageCount){
+	endPage=pageCount;
+	}
+%>
+
+<%
+if(startPage > pageBlock){
+	%>
+	<a href="notice.jsp?pageNum=<%=startPage-pageBlock%>">Prev</a>
+	<%
+}
+%>
+<%for(int i=startPage; i<=endPage; i++) {
+
+%>
+<a href="notice.jsp?pageNum=<%=i%>"><%=i %></a>
+<%
+
+}
+%>
+<% if(endPage < pageCount){
+%>
+<a href="notice.jsp?pageNum=<%=startPage+pageBlock%>">Next</a>
+<%
+}
+%>
+
 </div>
 </article>
 <!-- 게시판 -->

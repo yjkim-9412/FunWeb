@@ -139,7 +139,11 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 	
 	<%if(id.equals(boardDTO.getName())) {%>
 <input type="button" value="글수정" class="btn" style="cursor: pointer;" onclick="location.href='update.jsp?num=<%=boardDTO.getNum()%>'">
-<input type="button" value="글삭제" class="btn" style="cursor: pointer;" onclick="location.href='deleteForm.jsp?num=<%=boardDTO.getNum()%>'">
+<form action="deleteBoard.jsp" name="deleteB" onsubmit="return fn_deleteBoard()" style="float: left;">
+<input type="hidden" name="num" value="<%=boardDTO.getNum()%>">
+<input type="submit" value="글삭제" class="btn" style="cursor: pointer;">
+</form>
+<%-- location.href='deleteForm.jsp?num=<%=boardDTO.getNum()%> --%>
 
 <%}
 }%>
@@ -185,6 +189,17 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 		fn.action="updateComment.jsp"; 
 	    fn.submit();
 	    return true;
+	}//updatComment()
+	
+	
+	function fn_deleteBoard() {
+		if(confirm("정말 삭제하시겠습니까?") == true) {
+			
+			return true;
+		}else {
+			
+			return false;
+		}
 	}
 	
 

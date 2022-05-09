@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -76,7 +77,7 @@ public class BoardDAO {
 		}//insertBoard
 	
 	// BoardDTO 여러개를 담을수 있는 자바 배열형태의 내장객체 List 리턴값있음
-	public List getBoardList() {
+	public List<BoardDTO> getBoardList(int startRow, int pageSize) {
 		// List 객체 생성
 		// 처음에는 10개 기억장소 할당 => 11개 부터 또 다른 10개 기억장소 할당 
 		// List 배열내장객체 값을 저장 .add(DTO) 주소값 순서대로 한칸씩 저장
@@ -87,9 +88,10 @@ public class BoardDAO {
 			// 1, 2 디비연결 메서드 호출
 			con=getConnection();
 			// 3 sql select 게시판 전체 글 가져오기
-			String sql="select * from board order by num desc";
+			String sql="select * from board order by num desc limit ?,?";
 			pstmt=con.prepareStatement(sql);
-			
+			pstmt.setInt(1, startRow - 1);
+			pstmt.setInt(2, pageSize);
 			// 4 실행 => 결과 저장
 			rs=pstmt.executeQuery();
 			// 5 결과 => 다음행 => 데이터 있으면 열접근 => 
@@ -105,14 +107,14 @@ public class BoardDAO {
 				boardDTO.setContent(rs.getString("content"));
 				boardDTO.setReadcount(rs.getInt("readcount"));
 				boardDTO.setDate(rs.getTimestamp("date"));
-				
+				boardList.add(boardDTO);
 				System.out.println(boardDTO);
 				
 				
 				
 				
 				
-				boardList.add(boardDTO);
+				
 			}
 			
 		} catch (Exception e) {
@@ -168,24 +170,72 @@ public class BoardDAO {
 		}
 	}// updateReadcount
 	
-	public void updateBoard(int num) {
-		BoardDTO boardDTO = null;
+	
+	public void updateBoard(BoardDTO boardDTO) {
+		
 		try {
 			con=getConnection();
 			
-			String sql="update board set name=?, subject=?, content=? where num=? ";
+			String sql = "select board set subject=?, content=?, where num=?";
 			pstmt=con.prepareStatement(sql);
-			boardDTO = new BoardDTO();
-			pstmt.setString(1, boardDTO.getName());
-			pstmt.setString(2, boardDTO.getSubject());
-			pstmt.setString(3, boardDTO.getContent());
-			pstmt.setInt(4, num);
-			pstmt.executeUpdate();
+			pstmt.setString(1, boardDTO.getSubject());
+			pstmt.setString(2, boardDTO.getContent());
+			pstmt.setInt(3, boardDTO.getNum());
+			
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
+			
+		}finally {
 			closeDB();
 		}
-	}// updateBoard
+	}//updateBOard
+	
+	public void deleteBoard(int num) {
+		
+		try {
+			con=getConnection();
+			
+			String sql = "delete from board where num=?";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			
+			pstmt.executeUpdate();
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		}finally {
+			closeDB();
+		}
+	}//updateBOard
+	
+	public int getboardCount() {
+		int count = 0;
+		try {
+			con=getConnection();
+			String sql = "select count(*) from board ";
+			pstmt=con.prepareStatement(sql);
+			
+			
+			rs=pstmt.executeQuery();
+			
+			
+			if(rs.next()) {
+			
+				count=rs.getInt("count(*)");
+			
+			}
+		
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			closeDB();
+		}
+		
+		
+		return count;
+	}
 	
 }// class

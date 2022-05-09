@@ -95,13 +95,14 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 <table id="notice" style="width: 100%">
 
     	
-    	<tr><td class="left"><%=commentDTO.getName()%><%=commentDTO.getId()%></td>
-        <td colspan="2"><textarea name="comment" rows="4" cols="60"></textarea></td>
-        <td><form action="updateCommentPro.jsp" name="updateComment" method="post" onsubmit="return fn_updatecomment();">
-        <input type="hidden" name="comment_num" value="<%=commentDTO.getComment_num()%>">
-        <input type="hidden" name="num" value="<%=boardDTO.getNum()%>">
+    	<tr><td class="left"><%=commentDTO.getId()%></td>
         
-        <input type="submit" value="등록" style="cursor: pointer; float: left;">
+        <td><form action="updateCommentPro.jsp" name="updateComment" method="post" onsubmit="return fn_updatecomment();">
+        <td colspan="2"><textarea name="comment" rows="4" cols="60" style="resize: none;"></textarea></td>
+        <td><input type="hidden" name="comment_num" value="<%=comment_num%>"><td></td>
+        <input type="hidden" name="num" value="<%=boardDTO.getNum()%>"></td>
+        
+        <td><input type="submit" value="등록" style="cursor: pointer; float: left;">
         </form>
         <input type="button" name=cancle value="취소" onclick="fn_cancle()" style="float: left;"></td>
         </tr>
