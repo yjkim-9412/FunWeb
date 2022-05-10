@@ -178,7 +178,7 @@ public class CommentDAO {
 		public void updateComment(CommentDTO commentDTO) {
 			try {
 				con=getConnection();
-				String sql = "update from comment set comment_cot=? where comment_num=?";
+				String sql = "update comment set comment_cot=? where comment_num = ?;";
 				pstmt=con.prepareStatement(sql);
 				pstmt.setString(1, commentDTO.getComment());
 				pstmt.setInt(2, commentDTO.getComment_num());

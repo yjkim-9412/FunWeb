@@ -202,7 +202,7 @@ public class MemberDAO {
 			//3단계  연결정보를 이용해서 sql구문 만들기 =>  PreparedStatement
 			// 문자열 => sql구문 변경, 실행할수 있는 내장객체 => PreparedStatement
 			// update 테이블이름 set 수정열=값 where 조건열=값;
-			String sql="update member set id=?, name=?, eamil=?, address=?, phone=?, mobile=?, where id=?";
+			String sql="update member set id=?, name=?, eamil=?, address=?, phone=?, mobile=? where id=?";
 			pstmt=con.prepareStatement(sql);
 			
 			pstmt.setString(1, updateDTO.getId());

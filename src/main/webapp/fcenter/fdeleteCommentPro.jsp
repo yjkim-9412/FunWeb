@@ -6,29 +6,32 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>center/updateCommentPro.jsp</title>
+<title>center/deleteCommentPro.jsp</title>
 </head>
 <body>
 <%
-request.setCharacterEncoding("utf-8");
+
+
 String id = (String)session.getAttribute("id");
-String comment = request.getParameter("comment");
 int comment_num = Integer.parseInt(request.getParameter("comment_num"));
 int num = Integer.parseInt(request.getParameter("num"));
-
 CommentDAO commentDAO = new CommentDAO();
 CommentDTO commentDTO = new CommentDTO();
 
-commentDTO.setComment(comment);
-commentDTO.setComment_num(comment_num);
-
-commentDAO.updateComment(commentDTO);
-
-response.sendRedirect("content.jsp?num="+num);
 
 
+if(id != null) {
+	
+	commentDAO.deleteComment(comment_num);
+	
+	response.sendRedirect("content.jsp?num=" + num);
+}else{%>
+	<script type="text/javascript">
+	alret("세션값 틀림");
+	location.href("../member/login.jsp");
+	</script>
+<%}%>
 
 
-%>
 </body>
 </html>

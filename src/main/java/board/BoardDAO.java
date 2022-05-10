@@ -53,7 +53,7 @@ public class BoardDAO {
 			// 가장 큰번호 +1
 			num=rs.getInt("max(num)")+1;
 		}
-		sql="insert into board(num,name,pass,subject,content,readcount,date) values(?,?,?,?,?,?,now())";
+		sql="insert into board(num,name,pass,subject,content,readcount,file,date) values(?,?,?,?,?,?,?,now())";
 		
 		
 		pstmt=con.prepareStatement(sql);
@@ -63,8 +63,9 @@ public class BoardDAO {
 		pstmt.setString(4, boardDTO.getSubject());
 		pstmt.setString(5, boardDTO.getContent());
 		pstmt.setInt(6, boardDTO.getReadcount());
+		//파일
+		pstmt.setString(7, boardDTO.getFile());
 		
-
 		
 		pstmt.executeUpdate();
 		} catch (Exception e) {
@@ -107,6 +108,7 @@ public class BoardDAO {
 				boardDTO.setContent(rs.getString("content"));
 				boardDTO.setReadcount(rs.getInt("readcount"));
 				boardDTO.setDate(rs.getTimestamp("date"));
+				boardDTO.setFile(rs.getString("file"));
 				boardList.add(boardDTO);
 				System.out.println(boardDTO);
 				
@@ -144,7 +146,8 @@ public class BoardDAO {
 			boardDTO.setContent(rs.getString("content"));
 			boardDTO.setReadcount(rs.getInt("readcount"));
 			boardDTO.setDate(rs.getTimestamp("date"));
-			
+			//파일
+			boardDTO.setFile(rs.getString("file"));
 			
 			}
 		} catch (Exception e) {
@@ -176,11 +179,14 @@ public class BoardDAO {
 		try {
 			con=getConnection();
 			
-			String sql = "select board set subject=?, content=?, where num=?";
+			String sql = "update board set subject=?,content=?,file=? where num=?";
 			pstmt=con.prepareStatement(sql);
 			pstmt.setString(1, boardDTO.getSubject());
 			pstmt.setString(2, boardDTO.getContent());
-			pstmt.setInt(3, boardDTO.getNum());
+			pstmt.setString(3, boardDTO.getFile());
+			pstmt.setInt(4, boardDTO.getNum());
+			
+			pstmt.executeUpdate();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -236,6 +242,21 @@ public class BoardDAO {
 		
 		
 		return count;
-	}
+	}//getboardCount
+	
+	public void updateRecommend(int num) {
+		try {
+			con=getConnection();
+			
+			String sql="update board set recommend = recommend +1 where num=?";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			closeDB();
+		}
+	}// updateRecommend
 	
 }// class

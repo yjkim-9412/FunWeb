@@ -11,6 +11,9 @@ public class BoardDTO {
 	private String content;
 	private int readcount;
 	private Timestamp date;
+	//파일
+	private String file;
+	
 	
 	public int getNum() {
 		return num;
@@ -54,6 +57,11 @@ public class BoardDTO {
 	public void setDate(Timestamp date) {
 		this.date = date;
 	}
-	
+	public String getFile() {
+		return file;
+	}
+	public void setFile(String file) {
+		this.file = file;
+	}
 
 }

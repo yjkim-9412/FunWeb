@@ -11,7 +11,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>center/content.jsp</title>
+<title>gcenter/gcontent.jsp</title>
 <link href="../css/default.css" rel="stylesheet" type="text/css">
 <link href="../css/subpage.css" rel="stylesheet" type="text/css">
 <!--[if lt IE 9]>
@@ -76,26 +76,17 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 %>
 
 <article>
-<h1>Notice Write</h1>
+<h1>Gallery Notice Write</h1>
 <table id="notice">
 <tr><td>글번호</td><td><%=boardDTO.getNum()%></td>
     <td>등록일</td><td><%=dateFormat.format(boardDTO.getDate())%></td></tr>
 <tr><td>글쓴이</td><td><%=boardDTO.getName()%></td>
     <td>조회수</td><td><%=boardDTO.getReadcount()%></td></tr>
 <tr><td>글제목</td><td colspan="3"><%=boardDTO.getSubject()%></td></tr>
+<tr><td>첨부파일</td><td colspan="3"><a href="../upload/<%=boardDTO.getFile()%>" ><%=boardDTO.getFile()%></a></td></tr>
+<tr><td>이미지</td><td><img src="../upload/<%=boardDTO.getFile()%>" ></td></tr>
 <tr><td>글내용</td><td colspan="3"><%=boardDTO.getContent()%></td></tr>
 </table><br>
-
-<form action="updateRecommendPro.jsp">
-<input type="submit" name="recommend" value="추천<%= %>" style="border: 1px solid #222; 
-	border-radius: 20px;
-	font-size: 16px;
-	letter-spacing: 1px;
-	padding: 7px 25px;
-	margin: 0px auto;
-	display: block; ">
-</form><br>
-
 
 <div id="comment">
 
@@ -105,22 +96,21 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 <!-- table로 추후에 변경 --> 
 <fieldset>
 댓글목록<br>
-<form action="deleteCommentPro.jsp" name="deleteComment" method="get" onsubmit="return fn_deletecomment();">
+<form action="gdeleteCommentPro.jsp" name="gdeleteComment" method="get" onsubmit="return fn_deletecomment();">
 <table id="notice" style="width: 100%">
 <%try{
     for(int i = 0; i < commentList.size(); i++){
     	// 배열 한칸 데이터 가져올때 get()
     	CommentDTO commentDTO = (CommentDTO)commentList.get(i);%>
-    	
     	<tr><td class="left"><%=commentDTO.getName() %></td>
         <td colspan="2" style="width: 50%; "><%=commentDTO.getComment()%></td><td></td>
         <td style="font-size: 1px"><%=dateFormat.format(commentDTO.getDate())%></td>
         <td><%if(id.equals(commentDTO.getId())){%>
         
-        <input type="hidden" name="comment_num" value="<%=commentDTO.getComment_num()%>">
+        <input type="hidden" name="gcomment_num" value="<%=commentDTO.getComment_num()%>">
         <input type="hidden" name="num" value="<%=boardDTO.getNum()%>">
         <input type="submit" value="댓글삭제" style="cursor: pointer; float: left;">
-        <input type="button" name="commentUpate" value="댓글수정" onclick="return fn_updateComment(this.form);" style="float: left;"><%}%></td>
+        <input type="button" name="gcommentUpate" value="댓글수정" onclick="return fn_updateComment(this.form);" style="float: left;"><%}%></td>
         
         
         </tr>
@@ -130,7 +120,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 </table>
 </form>
 </fieldset>
-<form name="fr" action="commentPro.jsp" method="post" onsubmit="return fn_content();">
+<form name="fr" action="gcommentPro.jsp" method="post" onsubmit="return fn_content();">
 <fieldset>
 댓글작성란<br>
 <textarea name="comment" rows=5 cols=75 style="resize: none"></textarea>
@@ -150,8 +140,8 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 <%if(id != null ) {%>
 	
 	<%if(id.equals(boardDTO.getName())) {%>
-<input type="button" value="글수정" class="btn" style="cursor: pointer;" onclick="location.href='update.jsp?num=<%=boardDTO.getNum()%>'">
-<form action="deleteBoard.jsp" name="deleteB" onsubmit="return fn_deleteBoard()" style="float: left;">
+<input type="button" value="글수정" class="btn" style="cursor: pointer;" onclick="location.href='fupdate.jsp?num=<%=boardDTO.getNum()%>'">
+<form action="fdeleteBoard.jsp" name="deleteB" onsubmit="return fn_deleteBoard()" style="float: left;">
 <input type="hidden" name="num" value="<%=boardDTO.getNum()%>">
 <input type="submit" value="글삭제" class="btn" style="cursor: pointer;">
 </form>
@@ -159,7 +149,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 
 <%}
 }%>
-<input type="button" value="글목록" class="btn" onclick="location.href=notice.jsp" style="cursor: pointer;">
+<input type="button" value="글목록" class="btn" onclick="location.href=gnotice.jsp" style="cursor: pointer;">
 
 </div>
 <div class="clear"></div>
@@ -198,7 +188,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 			}
 	}//fn_deletecomment()
 	function fn_updateComment(fn) {
-		fn.action="updateComment.jsp"; 
+		fn.action="gupdateComment.jsp"; 
 	    fn.submit();
 	    return true;
 	}//updatComment()

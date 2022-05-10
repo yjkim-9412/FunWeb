@@ -12,7 +12,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>center/notice.jsp</title>
+<title>fcenter/fnotice.jsp</title>
 <link href="../css/default.css" rel="stylesheet" type="text/css">
 <link href="../css/subpage.css" rel="stylesheet" type="text/css">
 <!--[if lt IE 9]>
@@ -96,7 +96,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
 %>
 <!-- 게시판 -->
 <article>
-<h1>Notice</h1>
+<h1>file Notice</h1>
 <table id="notice">
 <tr><th class="tno">No.</th>
     <th class="ttitle">Title</th>
@@ -107,7 +107,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
     for(int i = 0; i < boardList.size(); i++){
     	// 배열 한칸 데이터 가져올때 get()
     	BoardDTO boardDTO = boardList.get(i);%>
-    	<tr onclick="location.href='content.jsp?num=<%=boardDTO.getNum()%>'" style="cursor: pointer;"><td><%= boardDTO.getNum()%></td>
+    	<tr onclick="location.href='fcontent.jsp?num=<%=boardDTO.getNum()%>'" style="cursor: pointer;"><td><%= boardDTO.getNum()%></td>
     	 <%countComment = commentDAO.getCommentCount(boardDTO.getNum());%>
     	<td class="left"><%= boardDTO.getSubject()%> (<%=countComment%>)</td>
         <td></td><td><%=dateFormat.format(boardDTO.getDate())%></td><td><%= boardDTO.getReadcount()%></td></tr>
@@ -122,7 +122,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
 String id = (String)session.getAttribute("id");
 if (id != null) {
 %>
-<input type="button" value="글쓰기" class="btn" onclick="location.href='write.jsp'" style="cursor: pointer;">
+<input type="button" value="글쓰기" class="btn" onclick="location.href='fwrite.jsp'" style="cursor: pointer;">
 <%} %>
 </div>
 <div class="clear"></div>

@@ -12,7 +12,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>center/notice.jsp</title>
+<title>gcenter/gnotice.jsp</title>
 <link href="../css/default.css" rel="stylesheet" type="text/css">
 <link href="../css/subpage.css" rel="stylesheet" type="text/css">
 <!--[if lt IE 9]>
@@ -61,7 +61,7 @@ BoardDAO boardDAO = new BoardDAO();
 // 모든형을 배열에 저장 => 업캐스팅 데이터 저장
 
 // 한페이지에 보여줄 글개수 지정
-int pageSize=3;
+int pageSize=6;
 // 페이지 번호 가져오기
 
 String pageNum = request.getParameter("pageNum");
@@ -96,23 +96,34 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
 %>
 <!-- 게시판 -->
 <article>
-<h1>Notice</h1>
+<h1>Gallery file Notice</h1>
 <table id="notice">
-<tr><th class="tno">No.</th>
-    <th class="ttitle">Title</th>
-    <th class="twrite" style="font-size: 8pt">작성자</th>
-    <th class="tdate" style="font-size: 8pt">작성날짜</th>
-    <th class="tread" style="font-size: 8pt" >조회수</th></tr>
+    <tr onclick=>
     <%int countComment;
     for(int i = 0; i < boardList.size(); i++){
     	// 배열 한칸 데이터 가져올때 get()
     	BoardDTO boardDTO = boardList.get(i);%>
-    	<tr onclick="location.href='content.jsp?num=<%=boardDTO.getNum()%>'" style="cursor: pointer;"><td><%= boardDTO.getNum()%></td>
+    	
+    	<%= boardDTO.getNum()%>
     	 <%countComment = commentDAO.getCommentCount(boardDTO.getNum());%>
-    	<td class="left"><%= boardDTO.getSubject()%> (<%=countComment%>)</td>
-        <td></td><td><%=dateFormat.format(boardDTO.getDate())%></td><td><%= boardDTO.getReadcount()%></td></tr>
+    	<td>
+    	<%=i+1 %><br>
+    	<a href="gcontent.jsp?num=<%=boardDTO.getNum()%>" style=""><img src="../upload/<%=boardDTO.getFile()%>" width="100" height="100"></a><br>
+    	<%=boardDTO.getSubject()%> (<%=countComment%>)<br>
+    	<%=boardDTO.getName() %><br>
+        <%=dateFormat.format(boardDTO.getDate())%><br>
+        <%= boardDTO.getReadcount()%><br>
+        </td>
+        <%
+        if((i + 1)%3==0) {
+        	%>
+        	<tr></tr>
+        	<%
+        }
+        %>
         
    <% countComment = 0;}%>
+   </tr>
 </table>
 <div id="table_search">
 <input type="text" name="search" class="input_box">
@@ -122,7 +133,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
 String id = (String)session.getAttribute("id");
 if (id != null) {
 %>
-<input type="button" value="글쓰기" class="btn" onclick="location.href='write.jsp'" style="cursor: pointer;">
+<input type="button" value="글쓰기" class="btn" onclick="location.href='gwrite.jsp'" style="cursor: pointer;">
 <%} %>
 </div>
 <div class="clear"></div>
@@ -130,7 +141,7 @@ if (id != null) {
 <%
 // 1 ~ 10 11~ 20 페이지번호 구하기
 // 한화면 보여줄 페이지개수 설정
-int pageBlock=3;
+int pageBlock=5;
 
 //시작하는 페이지 번호
 // pageNum(currentPage) pageBlock => startPage
@@ -160,21 +171,21 @@ if(endPage > pageCount){
 <%
 if(startPage > pageBlock){
 	%>
-	<a href="notice.jsp?pageNum=<%=startPage-pageBlock%>">Prev</a>
+	<a href="gnotice.jsp?pageNum=<%=startPage-pageBlock%>">Prev</a>
 	<%
 }
 %>
 <%for(int i=startPage; i<=endPage; i++) {
 
 %>
-<a href="notice.jsp?pageNum=<%=i%>"><%=i %></a>
+<a href="gnotice.jsp?pageNum=<%=i%>"><%=i %></a>
 <%
 
 }
 %>
 <% if(endPage < pageCount){
 %>
-<a href="notice.jsp?pageNum=<%=startPage+pageBlock%>">Next</a>
+<a href="gnotice.jsp?pageNum=<%=startPage+pageBlock%>">Next</a>
 <%
 }
 %>

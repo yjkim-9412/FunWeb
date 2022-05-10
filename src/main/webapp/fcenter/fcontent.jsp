@@ -83,19 +83,9 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 <tr><td>글쓴이</td><td><%=boardDTO.getName()%></td>
     <td>조회수</td><td><%=boardDTO.getReadcount()%></td></tr>
 <tr><td>글제목</td><td colspan="3"><%=boardDTO.getSubject()%></td></tr>
+<tr><td>첨부파일</td><td colspan="3"><a href="../upload/<%=boardDTO.getFile()%>" ><%=boardDTO.getFile()%></a></td></tr>
 <tr><td>글내용</td><td colspan="3"><%=boardDTO.getContent()%></td></tr>
 </table><br>
-
-<form action="updateRecommendPro.jsp">
-<input type="submit" name="recommend" value="추천<%= %>" style="border: 1px solid #222; 
-	border-radius: 20px;
-	font-size: 16px;
-	letter-spacing: 1px;
-	padding: 7px 25px;
-	margin: 0px auto;
-	display: block; ">
-</form><br>
-
 
 <div id="comment">
 
@@ -111,7 +101,6 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
     for(int i = 0; i < commentList.size(); i++){
     	// 배열 한칸 데이터 가져올때 get()
     	CommentDTO commentDTO = (CommentDTO)commentList.get(i);%>
-    	
     	<tr><td class="left"><%=commentDTO.getName() %></td>
         <td colspan="2" style="width: 50%; "><%=commentDTO.getComment()%></td><td></td>
         <td style="font-size: 1px"><%=dateFormat.format(commentDTO.getDate())%></td>
@@ -150,8 +139,8 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 <%if(id != null ) {%>
 	
 	<%if(id.equals(boardDTO.getName())) {%>
-<input type="button" value="글수정" class="btn" style="cursor: pointer;" onclick="location.href='update.jsp?num=<%=boardDTO.getNum()%>'">
-<form action="deleteBoard.jsp" name="deleteB" onsubmit="return fn_deleteBoard()" style="float: left;">
+<input type="button" value="글수정" class="btn" style="cursor: pointer;" onclick="location.href='fupdate.jsp?num=<%=boardDTO.getNum()%>'">
+<form action="fdeleteBoard.jsp" name="deleteB" onsubmit="return fn_deleteBoard()" style="float: left;">
 <input type="hidden" name="num" value="<%=boardDTO.getNum()%>">
 <input type="submit" value="글삭제" class="btn" style="cursor: pointer;">
 </form>
@@ -159,7 +148,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 
 <%}
 }%>
-<input type="button" value="글목록" class="btn" onclick="location.href=notice.jsp" style="cursor: pointer;">
+<input type="button" value="글목록" class="btn" onclick="location.href=fnotice.jsp" style="cursor: pointer;">
 
 </div>
 <div class="clear"></div>
@@ -198,7 +187,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 			}
 	}//fn_deletecomment()
 	function fn_updateComment(fn) {
-		fn.action="updateComment.jsp"; 
+		fn.action="fupdateComment.jsp"; 
 	    fn.submit();
 	    return true;
 	}//updatComment()
