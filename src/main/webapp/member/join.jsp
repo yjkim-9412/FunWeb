@@ -24,6 +24,7 @@
 </head>
 <body>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript" src="../script/jquery-3.6.0.js"></script>
 <script type="text/javascript">
 function fn_Checkaddr() {
 		new daum.Postcode(
@@ -93,14 +94,20 @@ var result = null;
 		alert("ID를 입력하세요");
 		document.fr.id.focus();
 		
-		
+		return;
 		} else {
 			
 			 window.open("joinIdCheck.jsp?userid=" + document.fr.id.value, "",
 				"width=300, height=112, left=800, top=400,");
-				}
+			 	
+			 	
+			}
+			
 		}
-
+	
+	
+		
+		
 
 	function fn_Checkpass() {
 		if (document.fr.id.value == "") {
@@ -171,9 +178,9 @@ var result = null;
 <form action="joinPro.jsp" name="fr" id="join" method="post" onsubmit="return fn_Checkpass();">
 <fieldset>
 <legend>기본정보</legend>
-<label>ID</label>
+<label>ID</label><div id="duplicateId"></div>
 <input type="text" name="id" class="id">
-<input type="button" value="중복확인" class="dup"  onclick="fn_CheckId();" style="cursor: pointer;"><br>
+<input type="button" value="중복확인" class="dup" id="idcheck"  onclick="fn_CheckId();" style="cursor: pointer;"><br>
 <label>비밀번호</label>
 <input type="password" name="pass" id="Pass"><br>
 <label>비밀번호 확인</label>

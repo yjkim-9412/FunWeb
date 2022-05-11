@@ -39,7 +39,7 @@
 <li><a href="../center/notice.jsp">Notice</a></li>
 <li><a href="#">Public News</a></li>
 <li><a href="../fcenter/fnotice.jsp">Driver Download</a></li>
-<li><a href="#">Service Policy</a></li>
+<li><a href="../gcenter/gnotice.jsp">Service Policy</a></li>
 </ul>
 </nav>
 <!-- 왼쪽메뉴 -->

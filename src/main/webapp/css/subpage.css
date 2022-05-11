@@ -197,4 +197,10 @@ textarea #content {
     border: none;
     resize: none;
 }
-
+fieldset #checkID input.check{
+width: 120px; height: 23px;
+border-radius:8px; border: none;
+margin: 0 0 0 5px; font-weight: bold;color: #FFF;
+background-image: url("../images/member/dup.jpg");
+background-repeat: repeat-x;
+background-position: center center;}
