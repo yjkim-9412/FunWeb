@@ -67,6 +67,7 @@ BoardDTO boardDTO = boardDAO.getBoard(num);
 boardDAO.updateReadcount(num);
 
 CommentDAO commentDAO = new CommentDAO();
+commentDAO.getCommentCount(num);
 
 boardDTO.setNum(num);
 List<CommentDTO> commentList=commentDAO.getCommentList(boardDTO);
@@ -86,15 +87,15 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 <tr><td>글내용</td><td colspan="3"><%=boardDTO.getContent()%></td></tr>
 </table><br>
 
-<form action="updateRecommendPro.jsp">
-<input type="submit" name="recommend" value="추천<%= %>" style="border: 1px solid #222; 
+
+<input type="button" id="recommend" name="recommend" value="추천" style="border: 1px solid #222; 
 	border-radius: 20px;
 	font-size: 16px;
 	letter-spacing: 1px;
 	padding: 7px 25px;
 	margin: 0px auto;
 	display: block; ">
-</form><br>
+
 
 
 <div id="comment">
@@ -172,6 +173,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 <jsp:include page="../inc/bottom.jsp"></jsp:include>
 <!-- 푸터들어가는 곳 -->
 </div>
+<script type="text/javascript" src="../script/jquery-3.6.0.js"></script>
 <script type="text/javascript">
 
 	function fn_content() {
@@ -213,7 +215,9 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 			return false;
 		}
 	}
-	
+	$(document).ready(function(){
+		
+	});
 
 </script>
 </body>
