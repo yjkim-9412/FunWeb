@@ -88,7 +88,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 </table><br>
 
 
-<input type="button" id="recommend" name="recommend" value="추천" style="border: 1px solid #222; 
+<input type="button" id="recommend" name="recommend" value="추천" onclick="location.href=recommendPro.jsp?num=num" style="border: 1px solid #222; 
 	border-radius: 20px;
 	font-size: 16px;
 	letter-spacing: 1px;
