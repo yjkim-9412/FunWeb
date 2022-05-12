@@ -109,7 +109,8 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
     <th class="ttitle">Title</th>
     <th class="twrite" style="font-size: 8pt">작성자</th>
     <th class="tdate" style="font-size: 8pt">작성날짜</th>
-    <th class="tread" style="font-size: 8pt" >조회수</th></tr>
+    <th class="tread" style="font-size: 8pt" >조회수</th>
+    <th class="tread" style="font-size: 8pt" >추천수</tr>
     <%int countCommentR;
     for(int i = 0; i < bestBoardList.size(); i++){
     	// 배열 한칸 데이터 가져올때 get()
@@ -117,7 +118,8 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
     	<tr onclick="location.href='content.jsp?num=<%=boardDTO.getNum()%>'" style="cursor: pointer;"><td><%= boardDTO.getNum()%></td>
     	 <%countCommentR = commentDAO.getCommentCount(boardDTO.getNum());%>
     	<td class="left"><%= boardDTO.getSubject()%> (<%=countCommentR%>)</td>
-        <td><%=boardDTO.getName()%></td><td><%=dateFormat.format(boardDTO.getDate())%></td><td><%= boardDTO.getReadcount()%></td></tr>
+        <td><%=boardDTO.getName()%></td><td><%=dateFormat.format(boardDTO.getDate())%></td><td><%= boardDTO.getReadcount()%></td>
+        <td style="color: red;"><%=boardDTO.getRecommend() %></td></tr>
         
    <% countCommentR = 0;}%>
 </table>
@@ -127,7 +129,8 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
     <th class="ttitle">Title</th>
     <th class="twrite" style="font-size: 8pt">작성자</th>
     <th class="tdate" style="font-size: 8pt">작성날짜</th>
-    <th class="tread" style="font-size: 8pt" >조회수</th></tr>
+    <th class="tread" style="font-size: 8pt" >조회수</th>
+    <th class="tread" style="font-size: 8pt" >추천수</tr>
     <%int countComment;
     for(int i = 0; i < boardList.size(); i++){
     	// 배열 한칸 데이터 가져올때 get()
@@ -135,7 +138,8 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
     	<tr onclick="location.href='content.jsp?num=<%=boardDTO.getNum()%>'" style="cursor: pointer;"><td><%= boardDTO.getNum()%></td>
     	 <%countComment = commentDAO.getCommentCount(boardDTO.getNum());%>
     	<td class="left"><%= boardDTO.getSubject()%> (<%=countComment%>)</td>
-        <td><%=boardDTO.getName()%></td><td><%=dateFormat.format(boardDTO.getDate())%></td><td><%= boardDTO.getReadcount()%></td></tr>
+        <td><%=boardDTO.getName()%></td><td><%=dateFormat.format(boardDTO.getDate())%></td><td><%= boardDTO.getReadcount()%></td>
+        <td style="color: red;"><%=boardDTO.getRecommend() %></td></tr>
         
    <% countComment = 0;}%>
 </table>

@@ -20,14 +20,14 @@ if(id == null){%>
 <%}%>
 <div class="clear"></div>
 <!-- 로고들어가는 곳 -->
-<div id="logo"><img src="../images/logo.gif" width="265" height="62" alt="Fun Web"></div>
+<div id="logo"><a href="../main/main.jsp"><img src="../images/logo.gif" width="265" height="62" alt="Fun Web"></a></div>
 <!-- 로고들어가는 곳 -->
 <nav id="top_menu">
 <ul>
 	<li><a href="../main/main.jsp">HOME</a></li>
-	<li><a href="../company/welcome.jsp">회사소개</a></li>
+	<li><a href="../company/welcome.jsp">운동스케줄</a></li>
 	<li><a href="#">SOLUTIONS</a></li>
-	<li><a href="../center/notice.jsp">CUSTOMER CENTER</a></li>
+	<li><a href="../center/notice.jsp">자유게시판</a></li>
 	<li><a href="#">CONTACT US</a></li>
 </ul>
 </nav>
