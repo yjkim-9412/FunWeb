@@ -19,5 +19,9 @@ boardDAO.updateRecommend(num);
 
 // response.sendRedirect("content.jsp?num="+num);
 %>
+
+<script type="text/javascript">
+history.back();
+</script>
 </body>
 </html>

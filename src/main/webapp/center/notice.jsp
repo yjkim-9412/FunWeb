@@ -103,8 +103,8 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
 %>
 <!-- 게시판 -->
 <article>
-<h1>Notice</h1>
-<table id="notice">
+<h1>인기글</h1>
+<table id="notice" >
 <tr><th class="tno">No.</th>
     <th class="ttitle">Title</th>
     <th class="twrite" style="font-size: 8pt">작성자</th>
@@ -121,7 +121,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
         
    <% countCommentR = 0;}%>
 </table>
-<h1>Notice</h1>
+<h1>게시물</h1>
 <table id="notice">
 <tr><th class="tno">No.</th>
     <th class="ttitle">Title</th>
