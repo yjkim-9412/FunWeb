@@ -4,6 +4,7 @@ package board;
 import java.sql.Timestamp;
 
 public class BoardDTO {
+	
 	private int num;
 	private String name;
 	private String pass;
@@ -11,6 +12,7 @@ public class BoardDTO {
 	private String content;
 	private int readcount;
 	private Timestamp date;
+	private int recommend;
 	//파일
 	private String file;
 	
@@ -63,5 +65,10 @@ public class BoardDTO {
 	public void setFile(String file) {
 		this.file = file;
 	}
-
+	public int getRecommend() {
+		return recommend;
+	}
+	public void setRecommend(int recommend) {
+		this.recommend = recommend;
+	}
 }

@@ -66,8 +66,8 @@ BoardDAO boardDAO = new BoardDAO();
 BoardDTO boardDTO = boardDAO.getBoard(num);
 boardDAO.updateReadcount(num);
 
+
 CommentDAO commentDAO = new CommentDAO();
-commentDAO.getCommentCount(num);
 
 boardDTO.setNum(num);
 List<CommentDTO> commentList=commentDAO.getCommentList(boardDTO);
@@ -88,13 +88,13 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 </table><br>
 
 
-<input type="button" id="recommend" name="recommend" value="추천" onclick="location.href=recommendPro.jsp?num=num" style="border: 1px solid #222; 
+<input type="button" id="recommend" name="recommend" value="추천<%=boardDTO.getRecommend() %>" onclick="location.href='recommendPro.jsp?num=<%=boardDTO.getNum()%>'" style="cursor: pointer; border: 1px solid #222; 
 	border-radius: 20px;
 	font-size: 16px;
 	letter-spacing: 1px;
 	padding: 7px 25px;
 	margin: 0px auto;
-	display: block; ">
+	display: block; "><br>
 
 
 

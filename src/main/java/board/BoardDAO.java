@@ -53,7 +53,7 @@ public class BoardDAO {
 			// 가장 큰번호 +1
 			num=rs.getInt("max(num)")+1;
 		}
-		sql="insert into board(num,name,pass,subject,content,readcount,file,date) values(?,?,?,?,?,?,?,now())";
+		sql="insert into board(num,name,pass,subject,content,readcount,file,recommend,date) values(?,?,?,?,?,?,?,?,now())";
 		
 		
 		pstmt=con.prepareStatement(sql);
@@ -63,8 +63,10 @@ public class BoardDAO {
 		pstmt.setString(4, boardDTO.getSubject());
 		pstmt.setString(5, boardDTO.getContent());
 		pstmt.setInt(6, boardDTO.getReadcount());
+		
 		//파일
 		pstmt.setString(7, boardDTO.getFile());
+		pstmt.setInt(8, 0);
 		
 		
 		pstmt.executeUpdate();
@@ -109,6 +111,7 @@ public class BoardDAO {
 				boardDTO.setReadcount(rs.getInt("readcount"));
 				boardDTO.setDate(rs.getTimestamp("date"));
 				boardDTO.setFile(rs.getString("file"));
+				boardDTO.setRecommend(rs.getInt("recommend"));
 				boardList.add(boardDTO);
 				System.out.println(boardDTO);
 				
@@ -127,6 +130,42 @@ public class BoardDAO {
 		// List 배열 내장객체 주소값 리턴
 		return boardList;
 	}//getBoardList
+	
+	public List<BoardDTO> getBestBoardList() {
+			List bestBoardList = new ArrayList();
+		try {
+			
+			
+			con=getConnection();
+			// 3 sql select 게시판 전체 글 가져오기
+			String sql="select * from board order by recommend desc limit ?";
+			pstmt.setInt(1, 5);
+			
+			rs=pstmt.executeQuery();
+			while(rs.next()) {
+				BoardDTO boardDTO = new BoardDTO();
+				
+				boardDTO.setNum(rs.getInt("num"));
+				boardDTO.setPass(rs.getString("pass"));
+				boardDTO.setName(rs.getString("name"));
+				boardDTO.setSubject(rs.getString("subject"));
+				boardDTO.setContent(rs.getString("content"));
+				boardDTO.setReadcount(rs.getInt("readcount"));
+				boardDTO.setDate(rs.getTimestamp("date"));
+				boardDTO.setFile(rs.getString("file"));
+				boardDTO.setRecommend(rs.getInt("recommend"));
+				bestBoardList.add(boardDTO);
+				System.out.println(boardDTO);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			closeDB();
+		}
+		
+		return bestBoardList;
+	}
 	public BoardDTO getBoard(int num) {
 		BoardDTO boardDTO = null;
 		try {
@@ -148,6 +187,7 @@ public class BoardDAO {
 			boardDTO.setDate(rs.getTimestamp("date"));
 			//파일
 			boardDTO.setFile(rs.getString("file"));
+			boardDTO.setRecommend(rs.getInt("recommend"));
 			
 			}
 		} catch (Exception e) {
@@ -258,5 +298,25 @@ public class BoardDAO {
 			closeDB();
 		}
 	}// updateRecommend
+	
+	public BoardDTO getRecommend(int num) {
+		BoardDTO boardDTO = new BoardDTO();
+		try {
+			con=getConnection();
+			String sql="select recommend from board where num=?";
+			pstmt.setInt(1, num);
+			
+			rs=pstmt.executeQuery();
+			if(rs.next()) {
+				boardDTO.setRecommend(rs.getInt("recommend"));
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeDB();
+		}
+		return boardDTO;
+	}//getRecommend
 	
 }// class
