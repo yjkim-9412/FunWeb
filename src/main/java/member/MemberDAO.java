@@ -9,6 +9,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import board.BoardDTO;
+
 public class MemberDAO {
 	// 데이터베이스 작업 객체,주제
 	// 특징(속성) 저장하는 변수 => 멤버변수
@@ -137,7 +139,10 @@ public class MemberDAO {
 				memberDTO.setMobile(rs.getString("mobile"));
 				memberDTO.setPhone(rs.getString("phone"));
 				memberDTO.setDate(rs.getTimestamp("date"));
-				
+				memberDTO.setPoint_max(rs.getInt("point_max"));
+				memberDTO.setPoint_cur(rs.getInt("point_cur"));
+				memberDTO.setRating(rs.getInt("rating"));
+				memberDTO.setDate_cur(rs.getTimestamp("date_cur"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -183,6 +188,9 @@ public class MemberDAO {
 				memberDTO.setAddress(rs.getString("address"));
 				memberDTO.setMobile(rs.getString("mobile"));
 				memberDTO.setPhone(rs.getString("phone"));
+				memberDTO.setPoint_cur(rs.getInt("point_cur"));
+				memberDTO.setPoint_max(rs.getInt("point_max"));
+				memberDTO.setDate_cur(rs.getTimestamp("date_cur"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -266,6 +274,97 @@ public class MemberDAO {
 			closeDB();	
 		}
 		return result;
+	}//joinIdCheck
+	
+	public MemberDTO userLogin(String id, String pass) {
+		MemberDTO memberDTO=null;
+		
+		try {
+			//1, 2단계 디비연결 메서드 호출
+			con =getConnection();
+
+			//3단계  연결정보를 이용해서 sql구문 만들기 =>  PreparedStatement
+			// sql 폼에서 입력한 아이디 디비에 아이디 일치하고 ,
+//			     폼에서 입력한 비밀번호 디비에  비밀번호 일치
+			String sql="select *,DATE_FORMAT(date_cur,'%Y/%m/%d'),DATE_FORMAT(now(),'%Y/%m/%d') from member where id=? and pass=?";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, pass);
+
+			// 4단계   PreparedStatement sql구문 실행, select 결과 저장 => ResultSet
+			rs=pstmt.executeQuery();
+
+			// 5단계  ResultSet 저장된 내용을 출력, 저장
+			// 결과값 행접근 다음행 next() 다음행 => 데이터 있으면 true / 데이터 없으면 false
+			// 데이터 있으면 true 아이디 비밀번호 일치 => 세션값 생성 => main.jsp 이동
+			// 데이터 없으면 false 아이디 비밀번호 틀림 => 아이디 비밀번호 틀림 메시지 출력 , 뒤로이동
+			if(rs.next()) {
+				// 다음행 첫번째 행 데이터 있으면 true => 열접근
+				// memberDTO 객체생성 => 기억장소 할당
+				memberDTO=new MemberDTO();
+				// set메서드 호출 열접근을 데이터 저장
+				memberDTO.setId(rs.getString("id"));
+				memberDTO.setPass(rs.getString("pass"));
+				memberDTO.setName(rs.getString("name"));
+				memberDTO.setDate(rs.getTimestamp("date"));
+				memberDTO.setEmail(rs.getString("email"));
+				memberDTO.setAddress(rs.getString("address"));
+				memberDTO.setMobile(rs.getString("mobile"));
+				memberDTO.setPhone(rs.getString("phone"));
+				
+				String date_cur = rs.getString("DATE_FORMAT(date_cur,'%Y/%m/%d')");
+				String now = rs.getString("DATE_FORMAT(now(),'%Y/%m/%d')");
+				
+				if(date_cur.equals(now)) {
+					
+					}else{
+						sql="update member set date_cur=now(), point_cur= point_cur+(select login_point from point), point_max= point_max+(select login_point from point) where id=?"; 
+						pstmt=con.prepareStatement(sql);
+						pstmt.setString(1, id);
+						pstmt.executeUpdate();
+					}
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			closeDB();	
+		}
+		return memberDTO;
+	}// userLogin
+	
+	public void writePoint(BoardDTO boardDTO) {
+		try {
+			con =getConnection();
+			
+			String sql="update member set point_cur= point_cur+(select write_point from point), point_max= point_max+(select write_point from point) where id=?"; 
+			pstmt=con.prepareStatement(sql);
+			pstmt.setString(1, boardDTO.getName());
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			closeDB();
+		}
+	}//writePoint
+	
+	public void updateRating(MemberDTO memberDTO)throws Exception {
+		int rating = 0;
+		if(memberDTO.getPoint_max()>=200) {
+			rating=1;
+		}else if (memberDTO.getPoint_max()>=500) {
+			rating=2;
+		}else if(memberDTO.getPoint_max()>=800) {
+			rating=3;
+		}
+			con =getConnection();
+			
+			String sql="update member set rating=? where id=?"; 
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1, rating);
+			pstmt.setString(2, memberDTO.getId());
+			pstmt.executeUpdate();
+		
 	}
 	
 	

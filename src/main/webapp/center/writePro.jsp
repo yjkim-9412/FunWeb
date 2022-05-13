@@ -1,3 +1,4 @@
+<%@page import="member.MemberDAO"%>
 <%@page import="board.BoardDTO"%>
 <%@page import="board.BoardDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -19,7 +20,7 @@ int readcount = 0;
 
 BoardDAO boardDAO = new BoardDAO();
 BoardDTO boardDTO = new BoardDTO();
-
+MemberDAO memberDAO = new MemberDAO();
 
 boardDTO.setName(name);
 boardDTO.setPass(pass);
@@ -27,7 +28,7 @@ boardDTO.setSubject(subject);
 boardDTO.setContent(content);
 boardDTO.setReadcount(readcount);
 
-
+memberDAO.writePoint(boardDTO);
 boardDAO.insertBoard(boardDTO);
 
 response.sendRedirect("notice.jsp");

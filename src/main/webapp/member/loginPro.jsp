@@ -18,7 +18,7 @@ String pass=request.getParameter("pass");
 MemberDAO memberDAO=new MemberDAO();
 //리턴할형 MemberDTO   userCheck(String id, String pass) 메서드 정의
 //MemberDTO memberDTO =  주소.userCheck(id,pass) 메서드 호출
-MemberDTO memberDTO=memberDAO.userCheck(id, pass);
+MemberDTO memberDTO=memberDAO.userLogin(id, pass);
 
 if(memberDTO!=null){
 	// memberDTO 데이터 있으면  아이디 비밀번호 일치 

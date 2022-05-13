@@ -14,7 +14,7 @@ if(id == null){%>
 }else{%>
 					
 					
-	<div id="login"><a href="../member/update.jsp">set profile</a> |
+	<div id="login"><a href="../member/userInfo.jsp">profile</a> |
 					<a href="../member/logout.jsp">logout</a></div>
 	
 <%}%>

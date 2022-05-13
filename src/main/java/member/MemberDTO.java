@@ -11,6 +11,12 @@ public class MemberDTO {
 	private String address;
 	private String phone;
 	private String mobile;
+	private int point_cur;
+	private int point_max;
+	private Timestamp date;
+	private Timestamp date_cur;
+	private int rating;
+	
 	public String getEmail() {
 		return email;
 	}
@@ -35,7 +41,7 @@ public class MemberDTO {
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-	private Timestamp date;
+	
 	public String getId() {
 		return id;
 	}
@@ -60,6 +66,31 @@ public class MemberDTO {
 	public void setDate(Timestamp date) {
 		this.date = date;
 	}
+	public int getPoint_cur() {
+		return point_cur;
+	}
+	public void setPoint_cur(int point_cur) {
+		this.point_cur = point_cur;
+	}
+	public int getPoint_max() {
+		return point_max;
+	}
+	public void setPoint_max(int point_max) {
+		this.point_max = point_max;
+	}
+	public Timestamp getDate_cur() {
+		return date_cur;
+	}
+	public void setDate_cur(Timestamp date_cur) {
+		this.date_cur = date_cur;
+	}
+	public int getRating() {
+		return rating;
+	}
+	public void setRating(int rating) {
+		this.rating = rating;
+	}
+	
 	
 //	String gender;
 //	String email;
