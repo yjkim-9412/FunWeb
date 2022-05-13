@@ -28,7 +28,6 @@ boardDTO.setSubject(subject);
 boardDTO.setContent(content);
 boardDTO.setReadcount(readcount);
 
-memberDAO.writePoint(boardDTO);
 boardDAO.insertBoard(boardDTO);
 
 response.sendRedirect("notice.jsp");

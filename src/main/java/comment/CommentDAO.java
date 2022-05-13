@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 
 import board.BoardDAO;
 import board.BoardDTO;
+import member.MemberDAO;
 
 public class CommentDAO {
 	
@@ -71,6 +72,9 @@ public class CommentDAO {
 
 			
 			pstmt.executeUpdate();
+			
+			MemberDAO memberDAO = new MemberDAO();
+			memberDAO.commentPoint(commentDTO);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}finally {

@@ -10,6 +10,7 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import board.BoardDTO;
+import comment.CommentDTO;
 
 public class MemberDAO {
 	// 데이터베이스 작업 객체,주제
@@ -333,21 +334,40 @@ public class MemberDAO {
 		return memberDTO;
 	}// userLogin
 	
-	public void writePoint(BoardDTO boardDTO) {
-		try {
+	public void writePoint(BoardDTO boardDTO) throws Exception{
+			MemberDAO memberDAO = null;
+			memberDAO = new MemberDAO();
+			MemberDTO memberDTO = null;
+			memberDTO = new MemberDTO();
 			con =getConnection();
-			
+			memberDTO=memberDAO.getMember(boardDTO.getName());
 			String sql="update member set point_cur= point_cur+(select write_point from point), point_max= point_max+(select write_point from point) where id=?"; 
 			pstmt=con.prepareStatement(sql);
 			pstmt.setString(1, boardDTO.getName());
+			memberDAO.updateRating(memberDTO);
+			System.out.println(boardDTO.getName());
+			
+			
 			pstmt.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}finally{
-			closeDB();
-		}
+			
 	}//writePoint
-	
+	public void commentPoint(CommentDTO commentDTO) throws Exception {
+			MemberDAO memberDAO = null;
+			memberDAO = new MemberDAO();
+			MemberDTO memberDTO = null;
+			memberDTO = new MemberDTO();
+			memberDTO=memberDAO.getMember(commentDTO.getId());
+			con =getConnection();
+			
+			String sql="update member set point_cur= point_cur+(select comment_point from point), point_max= point_max+(select comment_point from point) where id=?"; 
+			pstmt=con.prepareStatement(sql);
+			pstmt.setString(1, memberDTO.getId());
+			memberDAO.updateRating(memberDTO);
+			pstmt.executeUpdate();
+			
+			
+		
+	}//writePoint
 	public void updateRating(MemberDTO memberDTO)throws Exception {
 		int rating = 0;
 		if(memberDTO.getPoint_max()>=200) {
@@ -356,6 +376,8 @@ public class MemberDAO {
 			rating=2;
 		}else if(memberDTO.getPoint_max()>=800) {
 			rating=3;
+		}else if(memberDTO.getPoint_max() < 200) {
+			rating=0;
 		}
 			con =getConnection();
 			
@@ -364,6 +386,30 @@ public class MemberDAO {
 			pstmt.setInt(1, rating);
 			pstmt.setString(2, memberDTO.getId());
 			pstmt.executeUpdate();
+		
+	}//updateRating
+	
+	public MemberDTO getRating(int rateNum) {
+		MemberDTO memberDTOR = null;
+		memberDTOR = new MemberDTO();
+		try {
+			con =getConnection();
+			
+			String sql="select * from rate rating=?"; 
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1, rateNum);
+			
+			rs=pstmt.executeQuery();
+			if(rs.next()) {
+				
+				memberDTOR.setRating_name(rs.getString("rating_name"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			closeDB();
+		}
+		return memberDTOR;
 		
 	}
 	

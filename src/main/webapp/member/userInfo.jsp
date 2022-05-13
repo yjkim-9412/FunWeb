@@ -17,6 +17,7 @@ String id = (String)session.getAttribute("id");
 
 MemberDAO memberDAO = new MemberDAO();
 MemberDTO memberDTO = memberDAO.getMember(id);
+// MemberDTO memberDTOR = memberDAO.getRating(memberDTO.getRating());
 
 
 %>
@@ -50,10 +51,12 @@ MemberDTO memberDTO = memberDAO.getMember(id);
 <input type="text" name="name" value="<%=memberDTO.getName()%>" readonly><br>
 <label>E-Mail</label>
 <input type="email" name="email" value="<%=memberDTO.getEmail()%>" readonly><br>
-<label>포인트</label>
+<label>총 누적한 포인트</label>
+<input type="text" name="point" value="<%=memberDTO.getPoint_max()%>" readonly><br>
+<label>사용가능 포인트</label>
 <input type="text" name="point" value="<%=memberDTO.getPoint_cur()%>" readonly><br>
-<label>등급</label>
-<input type="text" name="rating" value="<%=memberDTO.getRating()%>" readonly><br>
+<label>회원등급</label>
+<input type="text" name="rating" value="<%=memberDTO.getRating_name()%>" readonly><br>
 
 </fieldset>
 

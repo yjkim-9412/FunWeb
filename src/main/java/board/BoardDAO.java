@@ -10,6 +10,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import member.MemberDAO;
 import member.MemberDTO;
 
 
@@ -70,6 +71,11 @@ public class BoardDAO {
 		
 		
 		pstmt.executeUpdate();
+		MemberDAO memberDAO = new MemberDAO();
+		memberDAO.writePoint(boardDTO);
+		
+		
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {

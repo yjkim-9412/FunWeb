@@ -160,7 +160,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 
 <%}
 }%>
-<input type="button" value="글목록" class="btn" onclick="location.href=notice.jsp" style="cursor: pointer;">
+<input type="button" value="글목록" class="btn" onclick="location.href='notice.jsp'" style="cursor: pointer;">
 
 </div>
 <div class="clear"></div>

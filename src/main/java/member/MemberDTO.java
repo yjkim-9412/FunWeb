@@ -16,6 +16,7 @@ public class MemberDTO {
 	private Timestamp date;
 	private Timestamp date_cur;
 	private int rating;
+	private String rating_name;
 	
 	public String getEmail() {
 		return email;
@@ -90,6 +91,13 @@ public class MemberDTO {
 	public void setRating(int rating) {
 		this.rating = rating;
 	}
+	public String getRating_name() {
+		return rating_name;
+	}
+	public void setRating_name(String rating_name) {
+		this.rating_name = rating_name;
+	}
+	
 	
 	
 //	String gender;
