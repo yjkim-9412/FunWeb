@@ -122,10 +122,6 @@ public class BoardDAO {
 				System.out.println(boardDTO);
 				
 				
-				
-				
-				
-				
 			}
 			
 		} catch (Exception e) {
@@ -172,7 +168,45 @@ public class BoardDAO {
 		}
 		
 		return bestBoardList;
+	}//getBestBoardList
+	public List<BoardDTO> getSearchList(String ns, String search, int startRow, int pageSize) {
+		List searchList = new ArrayList();
+	try {
+		
+		System.out.println(ns);
+		con=getConnection();
+		// 3 sql select 게시판 전체 글 가져오
+		String sql="select * from board where " +ns+ " LIKE ?";
+		sql+="order by date desc limit ?,?";
+		pstmt=con.prepareStatement(sql);
+		pstmt.setString(1, "%"+search+"%");
+		pstmt.setInt(2, startRow - 1);
+		pstmt.setInt(3, pageSize);
+		rs=pstmt.executeQuery();
+		while(rs.next()) {
+			BoardDTO boardDTO = new BoardDTO();
+			
+			boardDTO.setNum(rs.getInt("num"));
+			boardDTO.setPass(rs.getString("pass"));
+			boardDTO.setName(rs.getString("name"));
+			boardDTO.setSubject(rs.getString("subject"));
+			boardDTO.setContent(rs.getString("content"));
+			boardDTO.setReadcount(rs.getInt("readcount"));
+			boardDTO.setDate(rs.getTimestamp("date"));
+			boardDTO.setFile(rs.getString("file"));
+			boardDTO.setRecommend(rs.getInt("recommend"));
+			searchList.add(boardDTO);
+			System.out.println(boardDTO);
+		}
+		
+	} catch (Exception e) {
+		e.printStackTrace();
+	}finally {
+		closeDB();
 	}
+	
+	return searchList;
+}//getsearchList
 	public BoardDTO getBoard(int num) {
 		BoardDTO boardDTO = null;
 		try {

@@ -12,7 +12,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>center/notice.jsp</title>
+<title>center/noticeSearch.jsp</title>
 <link href="../css/default.css" rel="stylesheet" type="text/css">
 <link href="../css/subpage.css" rel="stylesheet" type="text/css">
 <!--[if lt IE 9]>
@@ -52,6 +52,10 @@
 </nav>
 <!-- 왼쪽메뉴 -->
 <%
+request.setCharacterEncoding("utf-8");
+String search = request.getParameter("search");
+String ns = request.getParameter("ns");
+
 CommentDAO commentDAO = new CommentDAO();
 CommentDTO commetDTO;
 
@@ -66,65 +70,40 @@ int pageSizeR=5;
 // 페이지 번호 가져오기
 
 String pageNum = request.getParameter("pageNum");
-String pageNumR = request.getParameter("pageNum");
+
 //페이지 번호가 없으면 "1"페이지 지정
 if(pageNum == null) {
 	pageNum="1";
 }
-if(pageNumR == null) {
-	pageNumR="1";
-}
+
 // pageNum pageSize 조합해서 => startRow 시작하는 행번호  => 식(알고리즘)
 // PageNum => 문자열 정수형 변경
 int currentPage = Integer.parseInt(pageNum);
-int currentPageR = Integer.parseInt(pageNumR);
+
 // pageNum pageSize => startRow
 // 1		10		=>	 	=> (1-1) * 10 + 1=> 0 + 1=>1
 // 2		10		=>		=> (2-1) * 10 + 1=> 10 + 1=>11
 // 3		10		=>		=> (3-1) * 10 + 1=> 20 + 1=>21
 int startRow = (currentPage - 1) * pageSize + 1;
-int startRowR = (currentPageR - 1) * pageSizeR + 1;
+
 //startRow pageSize 조합해서 => endRow 끝나는 행번호 구하기
 // 	1		10					10
 //	11		10					20
 //	21		10					30
 
 int endRow = startRow + pageSize - 1;
-int endRowR = startRowR + pageSizeR - 1;
+
 // List boardList=boardDAO.getBoardList();
 
 //BoardDTO형만 배열에 저장
 // List<BoardDTO> boardList=boardDAO.getBoardList(startRow, pageSize);
-List<BoardDTO> boardList=boardDAO.getBoardList(startRow, pageSize);
-List<BoardDTO> bestBoardList=boardDAO.getBestBoardList();
+List<BoardDTO> searchList=boardDAO.getSearchList(ns, search, startRow, pageSize);
 
 // 날짜 => 문자열(원하는 포맷) 변경
 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
 %>
 <!-- 게시판 -->
 <article>
-<h1>인기글</h1>
-<table id="notice" >
-<tr><th class="tno">No.</th>
-    <th class="ttitle">Title</th>
-    <th class="twrite" style="font-size: 8pt">작성자</th>
-    <th class="tdate" style="font-size: 8pt">작성날짜</th>
-    <th class="tread" style="font-size: 8pt" >조회수</th>
-    <th class="tread" style="font-size: 8pt" >추천수</tr>
-    <%int countCommentR;
-    
-    for(int i = 0; i < bestBoardList.size(); i++){
-    	// 배열 한칸 데이터 가져올때 get()
-    	BoardDTO boardDTO = bestBoardList.get(i);%>
-    	
-    	<tr onclick="location.href='content.jsp?num=<%=boardDTO.getNum()%>'" style="cursor: pointer;"><td><%= boardDTO.getNum()%></td>
-    	 <%countCommentR = commentDAO.getCommentCount(boardDTO.getNum());%>
-    	<td class="left"><%= boardDTO.getSubject()%> (<%=countCommentR%>)</td>
-        <td><%=boardDTO.getName()%></td><td><%=dateFormat.format(boardDTO.getDate())%></td><td><%= boardDTO.getReadcount()%></td>
-        <td style="color: red;"><%=boardDTO.getRecommend() %></td></tr>
-        
-   <% countCommentR = 0;}%>
-</table>
 <h1>게시물</h1>
 <table id="notice">
 <tr><th class="tno">No.</th>
@@ -134,9 +113,9 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
     <th class="tread" style="font-size: 8pt" >조회수</th>
     <th class="tread" style="font-size: 8pt" >추천수</tr>
     <%int countComment;
-    for(int i = 0; i < boardList.size(); i++){
+    for(int i = 0; i < searchList.size(); i++){
     	// 배열 한칸 데이터 가져올때 get()
-    	BoardDTO boardDTO = boardList.get(i);%>
+    	BoardDTO boardDTO = searchList.get(i);%>
     	<tr onclick="location.href='content.jsp?num=<%=boardDTO.getNum()%>'" style="cursor: pointer;"><td><%= boardDTO.getNum()%></td>
     	 <%countComment = commentDAO.getCommentCount(boardDTO.getNum());%>
     	<td class="left"><%= boardDTO.getSubject()%> (<%=countComment%>)</td>
@@ -145,16 +124,17 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
         
    <% countComment = 0;}%>
 </table>
-<div id="table_search">
+<div id="searchPro.jsp">
 <form action="noticeSearch.jsp" method="post">
 <select name="ns">
 	<option value="subject">제목</option>
 	<option value="name">작성자</option>
 	<option value="content">내용</option>
 </select>
-<input type="text" name="search" class="input_box" value="">
+<input type="text" name="search" class="input_box" value="${param.search}">
 <input type="submit" value="글검색" class="btn" style="cursor: pointer;">
 </form>
+
 <%
 String id = (String)session.getAttribute("id");
 if (id != null) {
