@@ -144,7 +144,7 @@ public class BoardDAO {
 			
 			con=getConnection();
 			// 3 sql select 게시판 전체 글 가져오기
-			String sql="select * from board order by recommend desc limit ?";
+			String sql="select * from board where recommend >= 10 order by recommend desc limit ?";
 			pstmt=con.prepareStatement(sql);
 			pstmt.setInt(1, 5);
 			

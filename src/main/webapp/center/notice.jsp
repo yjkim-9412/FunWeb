@@ -112,9 +112,11 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
     <th class="tread" style="font-size: 8pt" >조회수</th>
     <th class="tread" style="font-size: 8pt" >추천수</tr>
     <%int countCommentR;
+    
     for(int i = 0; i < bestBoardList.size(); i++){
     	// 배열 한칸 데이터 가져올때 get()
     	BoardDTO boardDTO = bestBoardList.get(i);%>
+    	
     	<tr onclick="location.href='content.jsp?num=<%=boardDTO.getNum()%>'" style="cursor: pointer;"><td><%= boardDTO.getNum()%></td>
     	 <%countCommentR = commentDAO.getCommentCount(boardDTO.getNum());%>
     	<td class="left"><%= boardDTO.getSubject()%> (<%=countCommentR%>)</td>

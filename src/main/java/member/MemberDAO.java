@@ -77,7 +77,7 @@ public class MemberDAO {
 			// //3단계  연결정보를 이용해서 sql구문 만들기 =>  PreparedStatement
 			// // String sql="insert into 테이블이름(열이름,열이름) values(값,'값')";
 			// // String sql="insert into member(id,pass,name,date) values(?,?,?,?)";
-			String sql = "insert into member(id,pass,name,email,address,phone,mobile,date) values(?,?,?,?,?,?,?,now())";
+			String sql = "insert into member(id,pass,name,email,address,phone,mobile,rating,date,date_cur) values(?,?,?,?,?,?,?,?,now(),now())";
 			pstmt=con.prepareStatement(sql);
 			// // 객체생성 후 첫번째 ? 정수형 num 값 넣기, 두번째 ? 문자열 name 값 넣기
 			pstmt.setString(1, memberDTO.getId());
@@ -87,6 +87,7 @@ public class MemberDAO {
 			pstmt.setString(5, memberDTO.getAddress());
 			pstmt.setString(6, memberDTO.getPhone());
 			pstmt.setString(7, memberDTO.getMobile());
+			pstmt.setInt(8, 5);
 			
 			
 	
@@ -118,7 +119,7 @@ public class MemberDAO {
 			
 			//3단계  연결정보를 이용해서 sql구문 만들기 =>  PreparedStatement
 			// 문자열 => sql구문 변경, 실행할수 있는 내장객체 => PreparedStatement
-			String sql="select * from member where id=?";
+			String sql="select member.*, rate.rating_name from member join rate ON member.rating = rate.rating where id=?";
 			pstmt=con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			// 4단계   PreparedStatement sql구문 실행 (insert,update,delete) ,
@@ -144,6 +145,7 @@ public class MemberDAO {
 				memberDTO.setPoint_cur(rs.getInt("point_cur"));
 				memberDTO.setRating(rs.getInt("rating"));
 				memberDTO.setDate_cur(rs.getTimestamp("date_cur"));
+				memberDTO.setRating_name(rs.getString("rating_name"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
