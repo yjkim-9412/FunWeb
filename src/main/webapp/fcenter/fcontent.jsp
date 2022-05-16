@@ -67,9 +67,23 @@ BoardDTO boardDTO = boardDAO.getBoard(num);
 boardDAO.updateReadcount(num);
 
 CommentDAO commentDAO = new CommentDAO();
+int pageSize = 10;
+
+String pageNum= request.getParameter("pageNum");
+
+if(pageNum == null){
+	pageNum = "1";
+}
+int currentPage = Integer.parseInt(pageNum);
+
+int startRow = (currentPage - 1) * pageSize +1;
+
+int endRow = startRow + (pageSize - 1);
+
+
 
 boardDTO.setNum(num);
-List<CommentDTO> commentList=commentDAO.getCommentList(boardDTO);
+List<CommentDTO> commentList=commentDAO.getCommentList(boardDTO, startRow, pageSize);
 
 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 

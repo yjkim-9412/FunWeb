@@ -132,22 +132,8 @@ public class MemberDAO {
 			if(rs.next()){
 				// 다음행 첫번째 행 데이터 있으면 true => 열접근
 				// memberDTO 객체생성 => 기억장소 할당
-				memberDTO=new MemberDTO();
-				memberDTO.setId(rs.getString("id"));
-				memberDTO.setPass(rs.getString("member.pass"));
-				memberDTO.setName(rs.getString("member.name"));
-				memberDTO.setDate(rs.getTimestamp("date"));
-				memberDTO.setEmail(rs.getString("email"));
-				memberDTO.setAddress(rs.getString("address"));
-				memberDTO.setMobile(rs.getString("mobile"));
-				memberDTO.setPhone(rs.getString("phone"));
-				memberDTO.setDate(rs.getTimestamp("date"));
-				memberDTO.setPoint_max(rs.getInt("point_max"));
-				memberDTO.setPoint_cur(rs.getInt("point_cur"));
-				memberDTO.setRating(rs.getInt("rating"));
-				memberDTO.setDate_cur(rs.getTimestamp("date_cur"));
-				memberDTO.setRating_name(rs.getString("rate.rating_name"));
-				System.out.println(memberDTO.getName());
+				 
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -429,7 +415,20 @@ public class MemberDAO {
 			
 			pstmt.executeUpdate();
 			memberDAO = new MemberDAO();
+			memberDAO.getMember(memberDTO.getId());
+			int rating = memberDTO.getRating();
 			
+			if(rating == 4) {
+				price = (int) (price / 0.3);
+			}else if(rating==3) {
+				price = (int) (price / 0.5);
+			}else if(rating==2) {
+				price = (int) (price / 0.7);
+			}else if(rating==1) {
+				price = (int) (price / 0.7);
+			}else if(rating==0) {
+				price = (int) (price / 1);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
