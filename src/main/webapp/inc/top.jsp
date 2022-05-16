@@ -25,7 +25,7 @@ if(id == null){%>
 <nav id="top_menu">
 <ul>
 	<li><a href="../main/main.jsp">HOME</a></li>
-	<li><a href="../company/welcome.jsp">운동스케줄</a></li>
+	<li><a href="../gcenter/gnotice.jsp">상품구매</a></li>
 	<li><a href="#">SOLUTIONS</a></li>
 	<li><a href="../center/notice.jsp">자유게시판</a></li>
 	<li><a href="#">CONTACT US</a></li>

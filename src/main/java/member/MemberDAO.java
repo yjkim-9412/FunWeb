@@ -120,6 +120,7 @@ public class MemberDAO {
 			//3단계  연결정보를 이용해서 sql구문 만들기 =>  PreparedStatement
 			// 문자열 => sql구문 변경, 실행할수 있는 내장객체 => PreparedStatement
 			String sql="select member.*, rate.rating_name from member join rate ON member.rating = rate.rating where id=?";
+//			String sql="select * from member where id=?";
 			pstmt=con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			// 4단계   PreparedStatement sql구문 실행 (insert,update,delete) ,
@@ -133,8 +134,8 @@ public class MemberDAO {
 				// memberDTO 객체생성 => 기억장소 할당
 				memberDTO=new MemberDTO();
 				memberDTO.setId(rs.getString("id"));
-				memberDTO.setPass(rs.getString("pass"));
-				memberDTO.setName(rs.getString("name"));
+				memberDTO.setPass(rs.getString("member.pass"));
+				memberDTO.setName(rs.getString("member.name"));
 				memberDTO.setDate(rs.getTimestamp("date"));
 				memberDTO.setEmail(rs.getString("email"));
 				memberDTO.setAddress(rs.getString("address"));
@@ -145,7 +146,8 @@ public class MemberDAO {
 				memberDTO.setPoint_cur(rs.getInt("point_cur"));
 				memberDTO.setRating(rs.getInt("rating"));
 				memberDTO.setDate_cur(rs.getTimestamp("date_cur"));
-				memberDTO.setRating_name(rs.getString("rating_name"));
+				memberDTO.setRating_name(rs.getString("rate.rating_name"));
+				System.out.println(memberDTO.getName());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

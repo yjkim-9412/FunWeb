@@ -102,22 +102,30 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
     <th class="ttitle">Title</th>
     <th class="twrite" style="font-size: 8pt">작성자</th>
     <th class="tdate" style="font-size: 8pt">작성날짜</th>
-    <th class="tread" style="font-size: 8pt" >조회수</th></tr>
+    <th class="tdate" style="font-size: 8pt" >조회수</th>
+    <th class="tread" style="font-size: 8pt" >추천수</th></tr>
     <%int countComment;
     for(int i = 0; i < boardList.size(); i++){
     	// 배열 한칸 데이터 가져올때 get()
     	BoardDTO boardDTO = boardList.get(i);%>
-    	<tr onclick="location.href='fcontent.jsp?num=<%=boardDTO.getNum()%>'" style="cursor: pointer;"><td><%= boardDTO.getNum()%></td>
+    	<tr onclick="location.href='content.jsp?num=<%=boardDTO.getNum()%>'" style="cursor: pointer;"><td><%= boardDTO.getNum()%></td>
     	 <%countComment = commentDAO.getCommentCount(boardDTO.getNum());%>
     	<td class="left"><%= boardDTO.getSubject()%> (<%=countComment%>)</td>
-        <td></td><td><%=dateFormat.format(boardDTO.getDate())%></td><td><%= boardDTO.getReadcount()%></td></tr>
+        <td><%=boardDTO.getName()%></td><td><%=dateFormat.format(boardDTO.getDate())%></td><td><%= boardDTO.getReadcount()%></td>
+        <td style="color: red;"><%=boardDTO.getRecommend() %></td></tr>
         
    <% countComment = 0;}%>
 </table>
 <div id="table_search">
-<input type="text" name="search" class="input_box">
-<input type="button" value="글검색" class="btn" style="cursor: pointer;">
-
+<form action="../center/noticeSearch.jsp" method="post">
+<select name="ns">
+	<option value="subject">제목</option>
+	<option value="name">작성자</option>
+	<option value="content">내용</option>
+</select>
+<input type="text" name="search" class="input_box" value="">
+<input type="submit" value="글검색" class="btn" style="cursor: pointer;">
+</form>
 <%
 String id = (String)session.getAttribute("id");
 if (id != null) {

@@ -1,3 +1,4 @@
+<%@page import="shop.ShopDAO"%>
 <%@page import="comment.CommentDTO"%>
 <%@page import="comment.CommentDAO"%>
 <%@page import="java.util.ArrayList"%>
@@ -55,7 +56,7 @@
 CommentDAO commentDAO = new CommentDAO();
 CommentDTO commetDTO;
 
-BoardDAO boardDAO = new BoardDAO();
+ShopDAO shopDAO = new ShopDAO();
 
 
 // 모든형을 배열에 저장 => 업캐스팅 데이터 저장
@@ -89,22 +90,22 @@ int endRow = startRow + pageSize - 1;
 
 //BoardDTO형만 배열에 저장
 // List<BoardDTO> boardList=boardDAO.getBoardList(startRow, pageSize);
-List<BoardDTO> boardList=boardDAO.getBoardList(startRow, pageSize);
+List<BoardDTO> shopList=shopDAO.getShopList(startRow, pageSize);
 
 // 날짜 => 문자열(원하는 포맷) 변경
 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
 %>
 <!-- 게시판 -->
 <article>
-<h1>Gallery file Notice</h1>
+<h1>이모티콘</h1>
 <table id="notice">
     <tr onclick=>
     <%int countComment;
-    for(int i = 0; i < boardList.size(); i++){
+    for(int i = 0; i < shopList.size(); i++){
     	// 배열 한칸 데이터 가져올때 get()
-    	BoardDTO boardDTO = boardList.get(i);%>
+    	BoardDTO boardDTO = shopList.get(i);%>
     	
-    	<%= boardDTO.getNum()%>
+    	
     	 <%countComment = commentDAO.getCommentCount(boardDTO.getNum());%>
     	<td>
     	<%=i+1 %><br>
@@ -123,12 +124,18 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
         %>
         
    <% countComment = 0;}%>
-   </tr>
+   
 </table>
 <div id="table_search">
-<input type="text" name="search" class="input_box">
-<input type="button" value="글검색" class="btn" style="cursor: pointer;">
-
+<form action="../center/noticeSearch.jsp" method="post">
+<select name="ns">
+	<option value="subject">제목</option>
+	<option value="name">작성자</option>
+	<option value="content">내용</option>
+</select>
+<input type="text" name="search" class="input_box" value="">
+<input type="submit" value="글검색" class="btn" style="cursor: pointer;">
+</form>
 <%
 String id = (String)session.getAttribute("id");
 if (id != null) {
@@ -160,7 +167,7 @@ int endPage = startPage + pageSize - 1;
 // 전체페이지 개수 구하기 글개수 50 , 한화면에 보여줄 글개수 10 => 페이지개수 5 + 0 => 5
 // 전체페이지 개수 구하기 글개수 50 , 한화면에 보여줄 글개수 10 => 페이지개수 5 + 1 => 6
 // int PageCount=글개수/pageSize + (글개수%pageSize==0?0:1);
-int count = boardDAO.getboardCount();
+int count = shopDAO.getShopCount();
 
 int pageCount = count/pageSize + (count%pageSize==0?0:1);
 if(endPage > pageCount){

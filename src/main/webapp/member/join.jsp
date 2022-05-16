@@ -26,6 +26,54 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="../script/jquery-3.6.0.js"></script>
 <script type="text/javascript">
+$(document).ready(function(){
+	$('#idcheck').click(function(){
+		$.ajax({
+			url:'joinIdCheck2.jsp',
+			data:{'id':$('#id').val()},
+			success:function(rdata){
+				// id="iddiv"에 들고온 데이터 rdata를 넣기
+				$('#duplicateId').html(rdata);
+			}
+		});
+	});
+	//id="join" submit() 이벤트
+	
+	$('#join').submit(function(){
+		
+		
+		if($('#id').val()==""){
+			alert("아이디 입력하세요");
+			$('#id').focus();
+			return false;
+			}
+		if($('#Pass').val()==""){
+		alert("비밀번호 입력하세요");
+		$('#Pass').focus();
+		return false;
+		}
+		if($('#Pass2').val()==""){
+		alert("비밀번호 확인 입력하세요");
+		$('#Pass2').focus();
+		return false;
+		}
+		if($('#email').val()==""){
+			alert("이메일 입력하세요");
+			$('#email').focus();
+			return false;
+		}
+		if($('#name').val()==""){
+			alert("이름 입력하세요");
+			$('#name').focus();
+			return false;
+		}
+		if($('#Pass').val()!=$('#Pass2').val()){
+			alert("비밀번호가 일치하지 않습니다");
+			$('#Pass').focus();
+			return false;
+		}
+	});
+});
 function fn_Checkaddr() {
 		new daum.Postcode(
 				{
@@ -86,73 +134,76 @@ function fn_Checkaddr() {
 					}
 				}).open();
 	}
-	
+</script>
 
-var result = null;
-	function fn_CheckId() {
-		if (document.fr.id.value == "" || document.fr.id.value < 0) {
-		alert("ID를 입력하세요");
-		document.fr.id.focus();
+
+	
+<script type="text/javascript">
+// var result = null;
+// 	function fn_CheckId() {
+// 		if (document.fr.id.value == "" || document.fr.id.value < 0) {
+// 		alert("ID를 입력하세요");
+// 		document.fr.id.focus();
 		
-		return;
-		} else {
+// 		return;
+// 		} else {
 			
-			 window.open("joinIdCheck.jsp?userid=" + document.fr.id.value, "",
-				"width=300, height=112, left=800, top=400,");
+// 			 window.open("joinIdCheck.jsp?userid=" + document.fr.id.value, "",
+// 				"width=300, height=112, left=800, top=400,");
 			 	
 			 	
-			}
+// 			}
 			
-		}
+// 		}
 	
 	
 		
 		
 
-	function fn_Checkpass() {
-		if (document.fr.id.value == "") {
-			alert("ID를 입력하세요");
-			document.fr.id.focus();
-			return false;
-		}
-		if(result == 0 || result == null) {
-			alert("아이디 중복확인 하세요");
+// 	function fn_Checkpass() {
+// 		if (document.fr.id.value == "") {
+// 			alert("ID를 입력하세요");
+// 			document.fr.id.focus();
+// 			return false;
+// 		}
+// 		if(result == 0 || result == null) {
+// 			alert("아이디 중복확인 하세요");
 			
-			return false;
-		}
+// 			return false;
+// 		}
 
-		if (document.fr.pass.value == "") {
-			alert("비밀번호 입력하세요");
-			document.fr.pass.focus();
-			return false;
-		}
-		if (document.fr.pass2.value == "") {
-			alert("2차비밀번호 입력하세요");
-			document.fr.pass2.focus();
-			return false;
-		}
-		if (document.fr.name.value == "") {
-			alert("이름을 입력하세요");
-			document.fr.name.focus();
-			return false;
-		}
-		if (document.fr.email.value == "") {
-			alert("이메일을 입력하세요");
-			document.fr.email.focus();
-			return false;
-		}
+// 		if (document.fr.pass.value == "") {
+// 			alert("비밀번호 입력하세요");
+// 			document.fr.pass.focus();
+// 			return false;
+// 		}
+// 		if (document.fr.pass2.value == "") {
+// 			alert("2차비밀번호 입력하세요");
+// 			document.fr.pass2.focus();
+// 			return false;
+// 		}
+// 		if (document.fr.name.value == "") {
+// 			alert("이름을 입력하세요");
+// 			document.fr.name.focus();
+// 			return false;
+// 		}
+// 		if (document.fr.email.value == "") {
+// 			alert("이메일을 입력하세요");
+// 			document.fr.email.focus();
+// 			return false;
+// 		}
 
-		var p1 = document.getElementById('Pass').value;
-		var p2 = document.getElementById('Pass2').value;
-		if (p1 != p2) {
-			alert("비밀번호가 일치 하지 않습니다");
-			document.fr.pass.focus();
-			return false;
-		} else {
+// 		var p1 = document.getElementById('Pass').value;
+// 		var p2 = document.getElementById('Pass2').value;
+// 		if (p1 != p2) {
+// 			alert("비밀번호가 일치 하지 않습니다");
+// 			document.fr.pass.focus();
+// 			return false;
+// 		} else {
 
-			return true;
-		}
-		return true;
+// 			return true;
+// 		}
+// 		return true;
 	}
 </script>
 	<div id="wrap">
@@ -178,17 +229,18 @@ var result = null;
 <form action="joinPro.jsp" name="fr" id="join" method="post" onsubmit="return fn_Checkpass();">
 <fieldset>
 <legend>기본정보</legend>
-<label>ID</label><div id="duplicateId"></div>
-<input type="text" name="id" class="id">
-<input type="button" value="중복확인" class="dup" id="idcheck"  onclick="fn_CheckId();" style="cursor: pointer;"><br>
+<label>ID</label>
+<input type="text" name="id" id="id" class="id">
+<input type="button" value="중복확인" class="dup" id="idcheck"  style="cursor: pointer;"><br>
+<div id="duplicateId"></div>
 <label>비밀번호</label>
 <input type="password" name="pass" id="Pass"><br>
 <label>비밀번호 확인</label>
 <input type="password" name="pass2" id="Pass2"><br>
 <label>이름</label>
-<input type="text" name="name"><br>
+<input type="text" name="name" id="name"><br>
 <label>E-Mail</label>
-<input type="email" name="email"><br>
+<input type="email" name="email" id="email"><br>
 </fieldset>
 
 <fieldset>

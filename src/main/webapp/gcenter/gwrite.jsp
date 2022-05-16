@@ -62,6 +62,7 @@ if(id==null){
 <tr><td>작성자</td><td><input type="text" name="name" value="<%=id %>" readonly></td></tr>
 <tr><td>제목</td><td><input type="text" name="subject"></td></tr>
 <tr><td>첨부파일</td><td><input type="file" name="file"></td></tr>
+<tr><td>가격</td><td><input type="text" name="price"></td></tr>
 <tr><td>내용</td>
     <td><textarea name="content" rows="10" cols="20"></textarea></td></tr>
 </table>

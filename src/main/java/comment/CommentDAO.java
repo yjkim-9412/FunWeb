@@ -65,7 +65,7 @@ public class CommentDAO {
 			pstmt.setString(2, commentDTO.getId());
 			pstmt.setString(3, commentDTO.getName());
 			pstmt.setString(4, commentDTO.getComment());
-			pstmt.setInt(5, commentDTO.getComment_num());
+			
 			pstmt.setInt(5, num);
 			
 			
@@ -83,7 +83,7 @@ public class CommentDAO {
 			
 		}//insertComment
 		
-		public List<CommentDTO> getCommentList(BoardDTO boardDTO) {
+		public List<CommentDTO> getCommentList(BoardDTO boardDTO, int startRow, int pageSize) {
 			// List 객체 생성
 			// 처음에는 10개 기억장소 할당 => 11개 부터 또 다른 10개 기억장소 할당 
 			// List 배열내장객체 값을 저장 .add(DTO) 주소값 순서대로 한칸씩 저장
@@ -95,9 +95,11 @@ public class CommentDAO {
 				// 1, 2 디비연결 메서드 호출
 				con=getConnection();
 				// 3 sql select 게시판 전체 글 가져오기
-				String sql="select * from comment where num=? order by comment_num";
+				String sql="select * from comment where num=? order by comment_num limit ?,? ";
 				pstmt=con.prepareStatement(sql);
 				pstmt.setInt(1, boardDTO.getNum());
+				pstmt.setInt(2, startRow-1);
+				pstmt.setInt(3, pageSize);
 				// 4 실행 => 결과 저장
 				rs=pstmt.executeQuery();
 				// 5 결과 => 다음행 => 데이터 있으면 열접근 => 

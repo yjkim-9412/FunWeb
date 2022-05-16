@@ -16,6 +16,9 @@ public class BoardDTO {
 	//파일
 	private String file;
 	
+	private int price;
+	private int dibs;
+	
 	
 	public int getNum() {
 		return num;
@@ -71,4 +74,17 @@ public class BoardDTO {
 	public void setRecommend(int recommend) {
 		this.recommend = recommend;
 	}
+	public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	public int getDibs() {
+		return dibs;
+	}
+	public void setDibs(int dibs) {
+		this.dibs = dibs;
+	}
+	
 }

@@ -52,9 +52,22 @@
 <!-- 왼쪽메뉴 -->
 <!-- 게시판 -->
 <%
+
 request.setCharacterEncoding("utf-8");
 String id = (String)session.getAttribute("id");
 int num = Integer.parseInt(request.getParameter("num"));
+int pageSize = 10;
+
+String pageNum= request.getParameter("pageNum");
+
+if(pageNum == null){
+	pageNum = "1";
+}
+int currentPage = Integer.parseInt(pageNum);
+
+int startRow = (currentPage - 1) * pageSize +1;
+
+int endRow = startRow + (pageSize - 1);
 
 BoardDAO boardDAO = new BoardDAO();
 
@@ -69,14 +82,14 @@ boardDAO.updateReadcount(num);
 CommentDAO commentDAO = new CommentDAO();
 
 boardDTO.setNum(num);
-List<CommentDTO> commentList=commentDAO.getCommentList(boardDTO);
+List<CommentDTO> commentList=commentDAO.getCommentList(boardDTO, startRow, pageSize);
 
 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 
 %>
 
 <article>
-<h1>Gallery Notice Write</h1>
+<h1>상품</h1>
 <table id="notice">
 <tr><td>글번호</td><td><%=boardDTO.getNum()%></td>
     <td>등록일</td><td><%=dateFormat.format(boardDTO.getDate())%></td></tr>
@@ -87,7 +100,20 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 <tr><td>이미지</td><td><img src="../upload/<%=boardDTO.getFile()%>" ></td></tr>
 <tr><td>글내용</td><td colspan="3"><%=boardDTO.getContent()%></td></tr>
 </table><br>
-
+<input type="button" id="purchase" name="purchase" value="구매하기" onclick="location.href='purchasePro.jsp?id=<%=id%>'" style="cursor: pointer; border: 1px solid #222; 
+	border-radius: 20px;
+	font-size: 16px;
+	letter-spacing: 1px;
+	padding: 7px 25px;
+	margin: 0px auto;
+	display: block; "><br>
+	
+	
+	<script type="text/javascript">
+	alert("로그인후 구매해주세요");
+	location.href="../member/logout.jsp";
+	</script>
+	
 <div id="comment">
 
 
@@ -96,7 +122,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 <!-- table로 추후에 변경 --> 
 <fieldset>
 댓글목록<br>
-<form action="gdeleteCommentPro.jsp" name="gdeleteComment" method="get" onsubmit="return fn_deletecomment();">
+<form action="gdeleteCommentPro.jsp" name="gdeleteComment" method="post" onsubmit="return fn_deletecomment();">
 <table id="notice" style="width: 100%">
 <%try{
     for(int i = 0; i < commentList.size(); i++){
@@ -133,7 +159,15 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 
 </form>
 </div>
+<%
+int pageBlock = 3;
 
+int startPage = currentPage-1 / pageBlock * pageBlock+1;
+
+int endPage = startPage + pageSize - 1;
+
+
+%>
 
 
 <div id="table_search">
@@ -202,6 +236,9 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 			
 			return false;
 		}
+	}
+	$(document).ready(function(){
+		
 	}
 	
 

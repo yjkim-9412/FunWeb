@@ -125,7 +125,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
    <% countComment = 0;}%>
 </table>
 <div id="searchPro.jsp">
-<form action="noticeSearch.jsp" method="post">
+<form action="noticeSearch.jsp" method="get">
 <select name="ns">
 	<option value="subject">제목</option>
 	<option value="name">작성자</option>
@@ -139,7 +139,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
 String id = (String)session.getAttribute("id");
 if (id != null) {
 %>
-<input type="button" value="글쓰기" class="btn" onclick="location.href='write.jsp'" style="cursor: pointer;">
+<input type="button" value="글쓰기" class="btn" onclick="location.href='write.jsp'" style="cursor: pointer; float: left;">
 <%} %>
 </div>
 <div class="clear"></div>
@@ -177,21 +177,21 @@ if(endPage > pageCount){
 <%
 if(startPage > pageBlock){
 	%>
-	<a href="notice.jsp?pageNum=<%=startPage-pageBlock%>">Prev</a>
+	<a href="noticeSearch.jsp?pageNum=<%=startPage-pageBlock%>&ns=${param.ns}&search=${param.search}">Prev</a>
 	<%
 }
 %>
 <%for(int i=startPage; i<=endPage; i++) {
 
 %>
-<a href="notice.jsp?pageNum=<%=i%>"><%=i %></a>
+<a href="noticeSearch.jsp?pageNum=<%=i%>&ns=${param.ns}&search=${param.search}"><%=i%></a>
 <%
 
 }
 %>
 <% if(endPage < pageCount){
 %>
-<a href="notice.jsp?pageNum=<%=startPage+pageBlock%>">Next</a>
+<a href="noticeSearch.jsp?pageNum=<%=startPage+pageBlock%>&ns=${param.ns}&search=${param.search}">Next</a>
 <%
 }
 %>

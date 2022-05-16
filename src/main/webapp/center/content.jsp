@@ -30,7 +30,6 @@
  <![endif]-->
 </head>
 <body>
-
 <div id="wrap">
 <!-- 헤더들어가는 곳 -->
 <jsp:include page="../inc/top.jsp"></jsp:include>
@@ -52,6 +51,31 @@
 <!-- 왼쪽메뉴 -->
 <!-- 게시판 -->
 <%
+int pageSize=10;
+
+//페이지 번호 가져오기
+
+String pageNum = request.getParameter("pageNum");
+
+//페이지 번호가 없으면 "1"페이지 지정
+if(pageNum == null) {
+	pageNum="1";
+}
+
+//pageNum pageSize 조합해서 => startRow 시작하는 행번호  => 식(알고리즘)
+//PageNum => 문자열 정수형 변경
+int currentPage = Integer.parseInt(pageNum);
+//1 ~ 10 11~ 20 페이지번호 구하기
+//한화면 보여줄 페이지개수 설정
+int startRow = (currentPage - 1) * pageSize + 1;
+
+//startRow pageSize 조합해서 => endRow 끝나는 행번호 구하기
+//	1		10					10
+//	11		10					20
+//	21		10					30
+
+int endRow = startRow + pageSize - 1;
+
 request.setCharacterEncoding("utf-8");
 String id = (String)session.getAttribute("id");
 int num = Integer.parseInt(request.getParameter("num"));
@@ -70,7 +94,7 @@ boardDAO.updateReadcount(num);
 CommentDAO commentDAO = new CommentDAO();
 
 boardDTO.setNum(num);
-List<CommentDTO> commentList=commentDAO.getCommentList(boardDTO);
+List<CommentDTO> commentList=commentDAO.getCommentList(boardDTO, startRow, pageSize);
 
 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 
@@ -111,7 +135,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 <%try{
     for(int i = 0; i < commentList.size(); i++){
     	// 배열 한칸 데이터 가져올때 get()
-    	CommentDTO commentDTO = (CommentDTO)commentList.get(i);%>
+    	CommentDTO commentDTO = commentList.get(i);%>
     	
     	<tr><td class="left"><%=commentDTO.getName() %></td>
         <td colspan="2" style="width: 50%; "><%=commentDTO.getComment()%></td><td></td>
@@ -131,7 +155,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 </table>
 </form>
 </fieldset>
-<form name="fr" action="commentPro.jsp" method="post" onsubmit="return fn_content();">
+<form name="fr" action="commentPro.jsp" method="get" onsubmit="return fn_content();">
 <fieldset>
 댓글작성란<br>
 <textarea name="comment" rows=5 cols=75 style="resize: none"></textarea>
@@ -144,7 +168,60 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 
 </form>
 </div>
+<div id="page_control">
+<%
 
+
+int pageBlock=3;
+
+//시작하는 페이지 번호
+// pageNum(currentPage) pageBlock => startPage
+// 		1~10(0~9)			10		=>	0*10 + 1 => 1
+//		11~20(10~19)		10		=>	1*10 + 1 =>11
+//		21~30(20~29)		10		=>	2*10 + 1 =>21
+int startPage = (currentPage-1) / pageBlock * pageBlock+1; 
+//끝나는 페이지 번호
+int endPage = startPage + pageSize - 1;
+
+
+
+// 구한 끝나는 페이지번호 10, 실제 페이지 번호 2
+// 글개수 구하기
+
+// 전체페이지 개수 구하기 글개수 50 , 한화면에 보여줄 글개수 10 => 페이지개수 5 + 0 => 5
+// 전체페이지 개수 구하기 글개수 50 , 한화면에 보여줄 글개수 10 => 페이지개수 5 + 1 => 6
+// int PageCount=글개수/pageSize + (글개수%pageSize==0?0:1);
+int count = boardDAO.getboardCount();
+
+int pageCount = count/pageSize + (count%pageSize==0?0:1);
+if(endPage > pageCount){
+	endPage=pageCount;
+	}
+%>
+
+<%
+if(startPage > pageBlock){
+	%>
+	<a href="content.jsp?pageNum=<%=startPage-pageBlock%>&num=<%=num%>">Prev</a>
+	<%
+}
+%>
+<%for(int i=startPage; i<=endPage; i++) {
+
+%>
+<a href="content.jsp?pageNum=<%=i%>&num=<%=num%>"><%=i %></a>
+<%
+
+}
+%>
+<% if(endPage < pageCount){
+%>
+<a href="content.jsp?pageNum=<%=startPage+pageBlock%>&num=<%=num%>">Next</a>
+<%
+}
+%>
+
+</div>
 
 
 <div id="table_search">

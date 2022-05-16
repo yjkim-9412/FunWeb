@@ -1,3 +1,4 @@
+<%@page import="shop.ShopDAO"%>
 <%@page import="com.oreilly.servlet.multipart.DefaultFileRenamePolicy"%>
 <%@page import="com.oreilly.servlet.MultipartRequest"%>
 <%@page import="board.BoardDAO"%>
@@ -37,6 +38,7 @@ String name=multi.getParameter("name");
 String pass=multi.getParameter("pass");
 String subject=multi.getParameter("subject");
 String content=multi.getParameter("content");
+String price=multi.getParameter("price");
 // num 데이터베이스 최대num+1 구하기 , readcount=0 설정, date 시스템날짜
 int readcount=0;
 // 파일
@@ -57,12 +59,12 @@ boardDTO.setFile(file);
 
 // 패키지 board 파일 BoardDAO
 // BoardDAO 객체생성
-BoardDAO boardDAO=new BoardDAO();
+ShopDAO shopDAO=new ShopDAO();
 // 리턴할형 없음 insertBoard(BoardDTO boardDTO) 메서드 정의
 // insertBoard(boardDTO 주소값) 호출
-boardDAO.insertBoard(boardDTO);
+shopDAO.insertShop(boardDTO);
 // notice.jsp 이동
-response.sendRedirect("fnotice.jsp");
+response.sendRedirect("gnotice.jsp");
 %>
 </body>
 </html>
