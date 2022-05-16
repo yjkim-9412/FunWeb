@@ -1,3 +1,4 @@
+<%@page import="shop.ShopDAO"%>
 <%@page import="java.util.List"%>
 <%@page import="comment.CommentDTO"%>
 <%@page import="comment.CommentDAO"%>
@@ -69,15 +70,15 @@ int startRow = (currentPage - 1) * pageSize +1;
 
 int endRow = startRow + (pageSize - 1);
 
-BoardDAO boardDAO = new BoardDAO();
+ShopDAO shopDAO = new ShopDAO();
 
 //게시판 글 조회수 증가
 // 리턴할형 없음 updateReadcount(int num) 메서드
 // update board set readcount = readcount +1 where num=?
 // updateReadcount(num) 호출
 
-BoardDTO boardDTO = boardDAO.getBoard(num);
-boardDAO.updateReadcount(num);
+BoardDTO boardDTO = shopDAO.getShop(num);
+shopDAO.updateReadcount(num);
 
 CommentDAO commentDAO = new CommentDAO();
 
@@ -90,6 +91,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 
 <article>
 <h1>상품</h1>
+<form action="purchasePro.jsp" method="post">
 <table id="notice">
 <tr><td>글번호</td><td><%=boardDTO.getNum()%></td>
     <td>등록일</td><td><%=dateFormat.format(boardDTO.getDate())%></td></tr>
@@ -97,22 +99,22 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
     <td>조회수</td><td><%=boardDTO.getReadcount()%></td></tr>
 <tr><td>글제목</td><td colspan="3"><%=boardDTO.getSubject()%></td></tr>
 <tr><td>첨부파일</td><td colspan="3"><a href="../upload/<%=boardDTO.getFile()%>" ><%=boardDTO.getFile()%></a></td></tr>
-<tr><td>이미지</td><td><img src="../upload/<%=boardDTO.getFile()%>" ></td></tr>
+<tr><td>이미지</td><td colspan="3"><img src="../upload/<%=boardDTO.getFile()%>" ></td></tr>
 <tr><td>글내용</td><td colspan="3"><%=boardDTO.getContent()%></td></tr>
+<tr><td>가격</td><td colspan="3"><%=boardDTO.getPrice() %>&nbsp; point</td></tr>
 </table><br>
-<input type="button" id="purchase" name="purchase" value="구매하기" onclick="location.href='purchasePro.jsp?id=<%=id%>'" style="cursor: pointer; border: 1px solid #222; 
+<input type="hidden" name="price" value="<%=boardDTO.getPrice()%>"> 
+<input type="hidden" name="merchantId" value="<%=boardDTO.getId()%>"> 
+<input type="submit" id="purchase" name="purchase" value="구매하기"  style="cursor: pointer; border: 1px solid #222; 
 	border-radius: 20px;
 	font-size: 16px;
 	letter-spacing: 1px;
 	padding: 7px 25px;
 	margin: 0px auto;
-	display: block; "><br>
+	display: block; "></form><br>
 	
 	
-	<script type="text/javascript">
-	alert("로그인후 구매해주세요");
-	location.href="../member/logout.jsp";
-	</script>
+	
 	
 <div id="comment">
 

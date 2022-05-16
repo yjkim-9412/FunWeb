@@ -33,12 +33,13 @@ String uploadPath=request.getRealPath("/upload");
 int maxSize=10*1024*1024;
 MultipartRequest multi=new MultipartRequest(request,uploadPath,maxSize,"utf-8",new DefaultFileRenamePolicy());
 
+String id = (String)session.getAttribute("id");
 // pass name subject content 파라미터 가져오기
 String name=multi.getParameter("name");
 String pass=multi.getParameter("pass");
 String subject=multi.getParameter("subject");
 String content=multi.getParameter("content");
-String price=multi.getParameter("price");
+int price=Integer.parseInt(multi.getParameter("price"));
 // num 데이터베이스 최대num+1 구하기 , readcount=0 설정, date 시스템날짜
 int readcount=0;
 // 파일
@@ -54,8 +55,10 @@ boardDTO.setPass(pass);
 boardDTO.setSubject(subject);
 boardDTO.setContent(content);
 boardDTO.setReadcount(readcount);
+boardDTO.setId(id);
 // 파일
 boardDTO.setFile(file);
+boardDTO.setPrice(price);
 
 // 패키지 board 파일 BoardDAO
 // BoardDAO 객체생성

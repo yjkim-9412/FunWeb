@@ -50,7 +50,7 @@ public class ShopDAO {
 			// 가장 큰번호 +1
 			num=rs.getInt("max(num)")+1;
 		}
-		sql="insert into shop(num,name,pass,subject,content,readcount,file,recommend,price,dibs,date) values(?,?,?,?,?,?,?,?,?,?,now())";
+		sql="insert into shop(num,name,pass,subject,content,readcount,file,recommend,price,dibs,id,date) values(?,?,?,?,?,?,?,?,?,?,?,now())";
 		
 		
 		pstmt=con.prepareStatement(sql);
@@ -61,6 +61,7 @@ public class ShopDAO {
 		pstmt.setString(5, boardDTO.getContent());
 		pstmt.setInt(6, boardDTO.getReadcount());
 		
+		
 		//파일
 		pstmt.setString(7, boardDTO.getFile());
 		pstmt.setInt(8, 0);
@@ -69,6 +70,7 @@ public class ShopDAO {
 		pstmt.setInt(9, boardDTO.getPrice());
 		pstmt.setInt(10, boardDTO.getDibs());
 		
+		pstmt.setString(11, boardDTO.getId());
 		
 		pstmt.executeUpdate();
 		MemberDAO memberDAO = new MemberDAO();
@@ -134,7 +136,7 @@ public class ShopDAO {
 		return shopList;
 	}//getShopList
 	
-	public BoardDTO getBoard(int num) {
+	public BoardDTO getShop(int num) {
 		BoardDTO boardDTO = null;
 		try {
 			con=getConnection();

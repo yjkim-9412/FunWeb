@@ -416,7 +416,26 @@ public class MemberDAO {
 		return memberDTOR;
 		
 	}
-	
+	public void usePoint(int price, MemberDTO memberDTO, MemberDTO MmemberDTO) {
+		MemberDAO memberDAO = null;
+		try {
+			con =getConnection();
+			
+			String sql="update member set point_cur+=?, point_max+=? where id=?"; 
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1, price);
+			pstmt.setInt(2, price);
+			pstmt.setString(3, MmemberDTO.getId());
+			
+			pstmt.executeUpdate();
+			memberDAO = new MemberDAO();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			closeDB();
+		}
+	}
 	
 	
 }//클래스

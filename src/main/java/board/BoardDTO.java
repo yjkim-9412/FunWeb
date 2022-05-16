@@ -4,7 +4,7 @@ package board;
 import java.sql.Timestamp;
 
 public class BoardDTO {
-	
+	private String id;
 	private int num;
 	private String name;
 	private String pass;
@@ -76,6 +76,12 @@ public class BoardDTO {
 	}
 	public int getPrice() {
 		return price;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 	public void setPrice(int price) {
 		this.price = price;

@@ -131,6 +131,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 <fieldset>
 댓글목록<br>
 <form action="deleteCommentPro.jsp" name="deleteComment" method="get" onsubmit="return fn_deletecomment();">
+<div>
 <table id="notice" style="width: 100%">
 <%try{
     for(int i = 0; i < commentList.size(); i++){
@@ -140,19 +141,18 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
     	<tr><td class="left"><%=commentDTO.getName() %></td>
         <td colspan="2" style="width: 50%; "><%=commentDTO.getComment()%></td><td></td>
         <td style="font-size: 1px"><%=dateFormat.format(commentDTO.getDate())%></td>
-        <td><%if(id.equals(commentDTO.getId())){%>
+        <td><%if(id != null){%>
         
         <input type="hidden" name="comment_num" value="<%=commentDTO.getComment_num()%>">
         <input type="hidden" name="num" value="<%=boardDTO.getNum()%>">
         <input type="submit" value="댓글삭제" style="cursor: pointer; float: left;">
         <input type="button" name="commentUpate" value="댓글수정" onclick="return fn_updateComment(this.form);" style="float: left;"><%}%></td>
         
-        
-        </tr>
         <%}
     } catch (Exception e) {
    			e.printStackTrace();}%>
 </table>
+</div>
 </form>
 </fieldset>
 <form name="fr" action="commentPro.jsp" method="get" onsubmit="return fn_content();">
