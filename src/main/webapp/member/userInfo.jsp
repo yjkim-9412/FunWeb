@@ -13,7 +13,11 @@
 </head>
 <body>
 <%
+
+
 String id = (String)session.getAttribute("id");
+
+out.print(id);
 
 MemberDAO memberDAO = new MemberDAO();
 MemberDTO memberDTO = memberDAO.getMember(id);

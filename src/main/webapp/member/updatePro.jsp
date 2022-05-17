@@ -25,6 +25,7 @@ String pass=request.getParameter("pass");
 String name=request.getParameter("name");
 String email=request.getParameter("email");
 String address=request.getParameter("address");
+String address2=request.getParameter("address2");
 String phone=request.getParameter("phone");
 String mobile=request.getParameter("mobile");
 
@@ -32,8 +33,8 @@ String mobile=request.getParameter("mobile");
 MemberDAO memberDAO =new MemberDAO();
 // MemberDTO memberDTO =  주소.userCheck(id,pass) 메서드 호출
 MemberDTO memberDTO=memberDAO.userCheck(id);
-
-if(memberDTO!=null){
+%>
+<%if(memberDTO!=null){
 	// memberDTO 데이터 있으면  아이디 비밀번호 일치 => 수정작업 => main.jsp 이동
 	// 수정할 정보를 하나의 바구니에 담기위해서 
 	// MemberDTO updateDTO 객체생성
@@ -41,13 +42,17 @@ if(memberDTO!=null){
 	// set메서드 호출 id,pass,name 폼에서 가져온값 저장
 	updateDTO.setId(idc);
 	updateDTO.setPass(pass);
-	
+	updateDTO.setName(name);
+	updateDTO.setEmail(email);
+	updateDTO.setAddress(address + address2);
+	updateDTO.setPhone(phone);
+	updateDTO.setMobile(mobile);
 			
 	// 리턴할형 없음  updateMember(MemberDTO updateDTO) 수정작업 메서드 정의
 	// 디비주소.updateMember(updateDTO) 메서드 호출
-	memberDAO.updateMember(updateDTO);
+	memberDAO.updateMember(updateDTO,id);
 	
-	response.sendRedirect("../main/main.jsp");
+	response.sendRedirect("login.jsp");
 }else{
 	// memberDTO 데이터 없으면  아이디 비밀번호 틀림 => 아이디 비밀번호 틀림 메시지 출력 , 뒤로이동
 	%>

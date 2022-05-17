@@ -170,7 +170,7 @@ public class MemberDAO {
 			//3단계  연결정보를 이용해서 sql구문 만들기 =>  PreparedStatement
 			// sql 폼에서 입력한 아이디 디비에 아이디 일치하고 ,
 //			     폼에서 입력한 비밀번호 디비에  비밀번호 일치
-			String sql="select * from member where id=? and pass=?";
+			String sql="select * from member where id=?";
 			pstmt=con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			
@@ -208,8 +208,8 @@ public class MemberDAO {
 	}
 	
 	// 리턴할형 없음  updateMember(MemberDTO updateDTO) 수정작업 메서드 정의
-	public void updateMember(MemberDTO updateDTO) {
-		
+	public void updateMember(MemberDTO updateDTO,String id) {
+			System.out.println(id);
 		try {
 			//1, 2단계 디비연결 메서드 호출
 			con =getConnection();
@@ -217,7 +217,7 @@ public class MemberDAO {
 			//3단계  연결정보를 이용해서 sql구문 만들기 =>  PreparedStatement
 			// 문자열 => sql구문 변경, 실행할수 있는 내장객체 => PreparedStatement
 			// update 테이블이름 set 수정열=값 where 조건열=값;
-			String sql="update member set id=?, name=?, eamil=?, address=?, phone=?, mobile=? where id=?";
+			String sql="update member set id=?, name=?, email=?, address=?, phone=?, mobile=?, pass=? where id=?";
 			pstmt=con.prepareStatement(sql);
 			
 			pstmt.setString(1, updateDTO.getId());
@@ -226,6 +226,8 @@ public class MemberDAO {
 			pstmt.setString(4, updateDTO.getAddress());
 			pstmt.setString(5, updateDTO.getPhone());
 			pstmt.setString(6, updateDTO.getMobile());
+			pstmt.setString(7, updateDTO.getPass());
+			pstmt.setString(8, id);
 			//4단계   PrepardStatement sql구문 실행 (insert,update,delete)		
 			pstmt.executeUpdate();
 			

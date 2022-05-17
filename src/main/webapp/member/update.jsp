@@ -29,7 +29,7 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="../script/jquery-3.6.0.js"></script>
 <script type="text/javascript">
-var result = -1;
+
 $(document).ready(function(){
 	$('#idcheck').click(function(){
 		$.ajax({
@@ -76,14 +76,7 @@ $(document).ready(function(){
 			$('#Pass').focus();
 			return false;
 		}
-		if(result == -1 || result == 0){
-			alert("아이디중복 확인해 주세요");
-			$('#id').focuse();
-			return false;
-		}else{
-			alert("아이디중복 에러");
-			return false;
-		}
+		
 	});
 });
 	
@@ -144,8 +137,11 @@ $(document).ready(function(){
 						document.getElementById('addr1').value = data.zonecode + fullAddr; //5자리 새우편번호 사용
 
 						document.getElementById('addr2').focus();
+						
+						
 					}
 				}).open();
+		window.close();
 	}
 	
 
