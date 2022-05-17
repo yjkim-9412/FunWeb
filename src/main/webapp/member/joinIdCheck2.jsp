@@ -9,12 +9,12 @@ String id = request.getParameter("id");
 
 MemberDAO memberDAO = new MemberDAO();
 MemberDTO memberDTO = memberDAO.getMember(id);
-
+int result;
 if(memberDTO == null){
-	%><span style="color: green;">아이디 사용가능</span><%
+	result = 0;%><span style="color: green;">아이디 사용가능</span><%
 	
 }else {
-	%><span style="color: red;">아이디 중복</span><%
+	result = 1;%><span style="color: red;">아이디 중복</span><%
 }
 %>
 		

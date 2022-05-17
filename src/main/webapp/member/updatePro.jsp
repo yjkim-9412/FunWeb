@@ -18,8 +18,9 @@
 request.setCharacterEncoding("utf-8");
 // 폼에서 입력한 값을 http가 서버에 전달해서 옴
 // 서버 request에 폼에서 입력한 값 저장
+String id = (String)session.getAttribute("id");
 // request에 저장된 파라미터 값 가져오기 "id" "pass" "name"
-String id=request.getParameter("id");
+String idc=request.getParameter("id");
 String pass=request.getParameter("pass");
 String name=request.getParameter("name");
 String email=request.getParameter("email");
@@ -30,7 +31,7 @@ String mobile=request.getParameter("mobile");
 //MemberDAO 객체생성=> 기억장소 할당
 MemberDAO memberDAO =new MemberDAO();
 // MemberDTO memberDTO =  주소.userCheck(id,pass) 메서드 호출
-MemberDTO memberDTO=memberDAO.userCheck(id, pass);
+MemberDTO memberDTO=memberDAO.userCheck(id);
 
 if(memberDTO!=null){
 	// memberDTO 데이터 있으면  아이디 비밀번호 일치 => 수정작업 => main.jsp 이동
@@ -38,7 +39,7 @@ if(memberDTO!=null){
 	// MemberDTO updateDTO 객체생성
 	MemberDTO updateDTO=new MemberDTO();
 	// set메서드 호출 id,pass,name 폼에서 가져온값 저장
-	updateDTO.setId(id);
+	updateDTO.setId(idc);
 	updateDTO.setPass(pass);
 	
 			

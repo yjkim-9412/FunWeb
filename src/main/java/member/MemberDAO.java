@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -87,7 +89,7 @@ public class MemberDAO {
 			pstmt.setString(5, memberDTO.getAddress());
 			pstmt.setString(6, memberDTO.getPhone());
 			pstmt.setString(7, memberDTO.getMobile());
-			pstmt.setInt(8, 5);
+			pstmt.setInt(8, 6);
 			
 			
 	
@@ -132,7 +134,21 @@ public class MemberDAO {
 			if(rs.next()){
 				// 다음행 첫번째 행 데이터 있으면 true => 열접근
 				// memberDTO 객체생성 => 기억장소 할당
-				 
+				memberDTO = new MemberDTO();
+				memberDTO.setId(rs.getString("id"));
+				memberDTO.setPass(rs.getString("pass"));
+				memberDTO.setName(rs.getString("name"));
+				memberDTO.setDate(rs.getTimestamp("date"));
+				memberDTO.setEmail(rs.getString("email"));
+				memberDTO.setAddress(rs.getString("address"));
+				memberDTO.setMobile(rs.getString("mobile"));
+				memberDTO.setPhone(rs.getString("phone"));
+				memberDTO.setDate_cur(rs.getTimestamp("date_cur"));
+				memberDTO.setPoint_cur(rs.getInt("point_cur"));
+				memberDTO.setPoint_max(rs.getInt("point_max"));
+				memberDTO.setRating(rs.getInt("rating"));
+				memberDTO.setRating_name(rs.getString("rate.rating_name"));
+				
 				
 			}
 		} catch (Exception e) {
@@ -144,7 +160,7 @@ public class MemberDAO {
 	}//getMember()
 	
 	// 리턴할형 MemberDTO   userCheck(String id, String pass) 메서드 정의
-	public MemberDTO userCheck(String id, String pass) {
+	public MemberDTO userCheck(String id) {
 		MemberDTO memberDTO=null;
 		
 		try {
@@ -157,7 +173,7 @@ public class MemberDAO {
 			String sql="select * from member where id=? and pass=?";
 			pstmt=con.prepareStatement(sql);
 			pstmt.setString(1, id);
-			pstmt.setString(2, pass);
+			
 
 			// 4단계   PreparedStatement sql구문 실행, select 결과 저장 => ResultSet
 			rs=pstmt.executeQuery();
@@ -334,11 +350,10 @@ public class MemberDAO {
 			String sql="update member set point_cur= point_cur+(select write_point from point), point_max= point_max+(select write_point from point) where id=?"; 
 			pstmt=con.prepareStatement(sql);
 			pstmt.setString(1, boardDTO.getName());
-			memberDAO.updateRating(memberDTO);
-			System.out.println(boardDTO.getName());
-			
 			
 			pstmt.executeUpdate();
+			pstmt.close();
+			memberDAO.updateRating(memberDTO);
 			
 	}//writePoint
 	public void commentPoint(CommentDTO commentDTO) throws Exception {
@@ -354,20 +369,23 @@ public class MemberDAO {
 			pstmt.setString(1, memberDTO.getId());
 			memberDAO.updateRating(memberDTO);
 			pstmt.executeUpdate();
+			pstmt.close();
 			
 			
 		
 	}//writePoint
 	public void updateRating(MemberDTO memberDTO)throws Exception {
 		int rating = 0;
-		if(memberDTO.getPoint_max()>=200) {
-			rating=1;
-		}else if (memberDTO.getPoint_max()>=500) {
-			rating=2;
-		}else if(memberDTO.getPoint_max()>=800) {
+		  if(memberDTO.getPoint_max()>=5000) {
 			rating=3;
-		}else if(memberDTO.getPoint_max() < 200) {
-			rating=0;
+		}else if(memberDTO.getPoint_max() >= 3000) {
+			rating=4;
+		}else if(memberDTO.getPoint_max() >= 1000) {
+			rating=5;
+		}else if(memberDTO.getRating() == 1 ) {
+			rating = 1;
+		}else if(memberDTO.getRating() == 2 ) {
+			rating = 2;
 		}
 			con =getConnection();
 			
@@ -403,38 +421,97 @@ public class MemberDAO {
 		
 	}
 	public void usePoint(int price, MemberDTO memberDTO, MemberDTO MmemberDTO) {
-		MemberDAO memberDAO = null;
+		
 		try {
+			
+			System.out.println(memberDTO.getRating());
+			System.out.println(memberDTO.getId());
+			System.out.println(price);
+			System.out.println(MmemberDTO.getId());
+			double VAT =price - price*0.1;
 			con =getConnection();
 			
-			String sql="update member set point_cur+=?, point_max+=? where id=?"; 
+			String sql="update member set point_cur=ROUND(point_cur + ?), point_max=(point_max + ?) where id=?"; 
 			pstmt=con.prepareStatement(sql);
-			pstmt.setInt(1, price);
-			pstmt.setInt(2, price);
+			pstmt.setDouble(1, VAT);
+			pstmt.setDouble(2, VAT);
+			
 			pstmt.setString(3, MmemberDTO.getId());
 			
 			pstmt.executeUpdate();
-			memberDAO = new MemberDAO();
-			memberDAO.getMember(memberDTO.getId());
-			int rating = memberDTO.getRating();
+			pstmt.close();
+			MemberDAO memberDAO = new MemberDAO();
+			memberDAO.updateRating(MmemberDTO);
 			
-			if(rating == 4) {
-				price = (int) (price / 0.3);
-			}else if(rating==3) {
-				price = (int) (price / 0.5);
-			}else if(rating==2) {
-				price = (int) (price / 0.7);
-			}else if(rating==1) {
-				price = (int) (price / 0.7);
-			}else if(rating==0) {
-				price = (int) (price / 1);
+			sql="update member set point_cur = ROUND(point_cur - (? - ? * (select discount_num from rate where rating = ?))) where id = ? ";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1, price);
+			pstmt.setInt(2, price);
+			pstmt.setInt(3, memberDTO.getRating());
+			pstmt.setString(4, memberDTO.getId());
+			
+			pstmt.executeUpdate();
+			pstmt.close();
+			
+			sql = "update shop set dibs= dibs+1 where id=?";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setString(1, MmemberDTO.getId());
+			pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			closeDB();
+		}
+	}//usePoint
+	
+	public List<MemberDTO> getMemberList() {
+		
+		List<MemberDTO>  memberList = new ArrayList<MemberDTO>();
+		
+		try {
+			//1, 2단계 디비연결 메서드 호출
+			con =getConnection();
+			
+			//3단계  연결정보를 이용해서 sql구문 만들기 =>  PreparedStatement
+			// 문자열 => sql구문 변경, 실행할수 있는 내장객체 => PreparedStatement
+			String sql="select * from member";
+//			String sql="select * from member where id=?";
+			pstmt=con.prepareStatement(sql);
+			
+			// 4단계   PreparedStatement sql구문 실행 (insert,update,delete) ,
+//			        select 결과 저장 => ResultSet
+			rs=pstmt.executeQuery();
+			// 5단계  ResultSet 저장된 내용을 출력, 저장
+			// 결과값 행접근 다음행 next() 다음행 => 데이터 있으면 true / 데이터 없으면 false
+			// 열접근 => 출력
+			while(rs.next()){
+				// 다음행 첫번째 행 데이터 있으면 true => 열접근
+				// memberDTO 객체생성 => 기억장소 할당
+				MemberDTO memberDTO = new MemberDTO();
+				memberDTO.setId(rs.getString("id"));
+				memberDTO.setPass(rs.getString("pass"));
+				memberDTO.setName(rs.getString("name"));
+				memberDTO.setDate(rs.getTimestamp("date"));
+				memberDTO.setEmail(rs.getString("email"));
+				memberDTO.setAddress(rs.getString("address"));
+				memberDTO.setMobile(rs.getString("mobile"));
+				memberDTO.setPhone(rs.getString("phone"));
+				memberDTO.setDate_cur(rs.getTimestamp("date_cur"));
+				memberDTO.setPoint_cur(rs.getInt("point_cur"));
+				memberDTO.setPoint_max(rs.getInt("point_max"));
+				memberDTO.setRating(rs.getInt("rating"));
+				
+				
+				memberList.add(memberDTO);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
 			closeDB();
 		}
-	}
+		return memberList;
+	}//getMemberList
 	
 	
 }//클래스

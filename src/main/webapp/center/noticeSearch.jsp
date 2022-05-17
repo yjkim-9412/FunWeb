@@ -55,7 +55,14 @@
 request.setCharacterEncoding("utf-8");
 String search = request.getParameter("search");
 String ns = request.getParameter("ns");
-
+if(search==null || search.equals("")){
+	%><script type="text/javascript"> 
+	
+	alert("검색내용을 입력해주세요");
+	history.back();
+	
+	</script><% 
+}
 CommentDAO commentDAO = new CommentDAO();
 CommentDTO commetDTO;
 

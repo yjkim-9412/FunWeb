@@ -27,29 +27,65 @@
 <body>
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript" src="../script/jquery-3.6.0.js"></script>
 <script type="text/javascript">
-var idCheck = 0;
-fn_CheckId();
-function fn_CheckId() {
-		
-	if (document.fr.id.value == "" || document.fr.id.value < 0) {
-		alert("ID를 입력하세요");
-		document.fr.id.focus();
-		return false;
-	} else {
-		window.open("joinIdCheck.jsp?userid=" + document.fr.id.value, "",
-				"width=500, height=300");
-			if(opener.document.fr.id.readOnly == true) {
-				document.write('아이디 사용가능');
-				idCheck = 1;
-			}else {
-				document.write('아이디 중복');
+var result = -1;
+$(document).ready(function(){
+	$('#idcheck').click(function(){
+		$.ajax({
+			url:'joinIdCheck2.jsp',
+			data:{'id':$('#id').val()},
+			success:function(rdata){
+				// id="iddiv"에 들고온 데이터 rdata를 넣기
+				$('#duplicateId').html(rdata);
 			}
-		}	 
+		});
+	});
+	//id="join" submit() 이벤트
 	
-	
-	
-}
+	$('#join').submit(function(){
+		
+		
+		if($('#id').val()==""){
+			alert("아이디 입력하세요");
+			$('#id').focus();
+			return false;
+			}
+		if($('#Pass').val()==""){
+		alert("비밀번호 입력하세요");
+		$('#Pass').focus();
+		return false;
+		}
+		if($('#Pass2').val()==""){
+		alert("비밀번호 확인 입력하세요");
+		$('#Pass2').focus();
+		return false;
+		}
+		if($('#email').val()==""){
+			alert("이메일 입력하세요");
+			$('#email').focus();
+			return false;
+		}
+		if($('#name').val()==""){
+			alert("이름 입력하세요");
+			$('#name').focus();
+			return false;
+		}
+		if($('#Pass').val()!=$('#Pass2').val()){
+			alert("비밀번호가 일치하지 않습니다");
+			$('#Pass').focus();
+			return false;
+		}
+		if(result == -1 || result == 0){
+			alert("아이디중복 확인해 주세요");
+			$('#id').focuse();
+			return false;
+		}else{
+			alert("아이디중복 에러");
+			return false;
+		}
+	});
+});
 	
 	function fn_Checkaddr() {
 		new daum.Postcode(
@@ -113,51 +149,7 @@ function fn_CheckId() {
 	}
 	
 
-	function fn_Checkpass() {
-		if (document.fr.id.value == "") {
-			alert("ID를 입력하세요");
-			document.fr.id.focus();
-			return false;
-		}
-		if(idCheck == 0) {
-			alert("아이디 중복확인 하세요");
-			
-			return false;
-		}
-
-		if (document.fr.pass.value == "") {
-			alert("비밀번호 입력하세요");
-			document.fr.pass.focus();
-			return false;
-		}
-		if (document.fr.pass2.value == "") {
-			alert("2차비밀번호 입력하세요");
-			document.fr.pass2.focus();
-			return false;
-		}
-		if (document.fr.name.value == "") {
-			alert("이름을 입력하세요");
-			document.fr.name.focus();
-			return false;
-		}
-		if (document.fr.email.value == "") {
-			alert("이메일을 입력하세요");
-			document.fr.email.focus();
-			return false;
-		}
-
-		var p1 = document.getElementById('Pass').value;
-		var p2 = document.getElementById('Pass2').value;
-		if (p1 != p2) {
-			alert("비밀번호가 일치 하지 않습니다");
-			document.fr.pass.focus();
-			return false;
-		} else {
-
-			return true;
-		}
-		return true;
-	}
+	
 </script>
 	<div id="wrap">
 <!-- 헤더들어가는 곳 -->
@@ -186,12 +178,13 @@ MemberDTO memberDTO = memberDAO.getMember(id);
 %>
 <article>
 <h1>회원가입</h1>
-<form action="updatePro.jsp" name="fr" id="join" method="post" onsubmit="return fn_Checkpass();">
+<form action="updatePro.jsp" name="fr" id="join" method="post">
 <fieldset>
 <legend>기본정보</legend>
 <label>ID</label>
-<input type="text" name="id" class="id" value="<%=memberDTO.getId()%>">
-<input type="button" value="중복확인" class="dup"  onclick="fn_CheckId()" style="cursor: pointer;"><br>
+<input type="text" name="id" id="id" class="id" value="<%=memberDTO.getId()%>">
+<input type="button" value="중복확인" id="idcheck" class="dup"  style="cursor: pointer;"><br>
+<div id="duplicateId"></div>
 <label>비밀번호 변경</label>
 <input type="password" name="pass" id="Pass"><br>
 <label>비밀번호 확인</label>

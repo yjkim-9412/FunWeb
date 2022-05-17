@@ -91,7 +91,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 
 <article>
 <h1>상품</h1>
-<form action="purchasePro.jsp" method="post">
+
 <table id="notice">
 <tr><td>글번호</td><td><%=boardDTO.getNum()%></td>
     <td>등록일</td><td><%=dateFormat.format(boardDTO.getDate())%></td></tr>
@@ -103,15 +103,27 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 <tr><td>글내용</td><td colspan="3"><%=boardDTO.getContent()%></td></tr>
 <tr><td>가격</td><td colspan="3"><%=boardDTO.getPrice() %>&nbsp; point</td></tr>
 </table><br>
-<input type="hidden" name="price" value="<%=boardDTO.getPrice()%>"> 
-<input type="hidden" name="merchantId" value="<%=boardDTO.getId()%>"> 
-<input type="submit" id="purchase" name="purchase" value="구매하기"  style="cursor: pointer; border: 1px solid #222; 
+
+<%if(id != null){%>
+<% if (!id.equals(boardDTO.getName())) {%>
+	<form action="purchasePro.jsp" method="post">
+	<input type="hidden" name="price" value="<%=boardDTO.getPrice()%>"> 
+	<input type="hidden" name="merchantId" value="<%=boardDTO.getName()%>"> 
+	<input type="hidden" name="boardNum" value="<%=boardDTO.getNum()%>"> 
+	<input type="submit" id="purchase" name="purchase" value="구매하기"  style="cursor: pointer; border: 1px solid #222; 
 	border-radius: 20px;
 	font-size: 16px;
 	letter-spacing: 1px;
 	padding: 7px 25px;
 	margin: 0px auto;
 	display: block; "></form><br>
+	<%}}else{ %><p style="border: 1px solid #222; 
+	border-radius: 20px;
+	font-size: 16px;
+	letter-spacing: 1px;
+	padding: 7px 25px;
+	margin: 0px auto;
+	display: block; ">로그인 후 구매 하실 수 있습니다</p><br><%} %>
 	
 	
 	

@@ -71,6 +71,7 @@ public class BoardDAO {
 		
 		
 		pstmt.executeUpdate();
+		pstmt.close();
 		MemberDAO memberDAO = new MemberDAO();
 		memberDAO.writePoint(boardDTO);
 		
@@ -92,7 +93,7 @@ public class BoardDAO {
 		// List 배열내장객체 값을 저장 .add(DTO) 주소값 순서대로 한칸씩 저장
 		// 값을 가져올때 .get(순서) 배열 한칸 값을 가져오기
 		// 배열 크기 .size()
-		List boardList = new ArrayList();
+		List<BoardDTO> boardList = new ArrayList<BoardDTO>();
 		try {
 			// 1, 2 디비연결 메서드 호출
 			con=getConnection();
@@ -134,7 +135,7 @@ public class BoardDAO {
 	}//getBoardList
 	
 	public List<BoardDTO> getBestBoardList() {
-			List bestBoardList = new ArrayList();
+			List<BoardDTO> bestBoardList = new ArrayList<BoardDTO>();
 		try {
 			
 			
@@ -170,7 +171,7 @@ public class BoardDAO {
 		return bestBoardList;
 	}//getBestBoardList
 	public List<BoardDTO> getSearchList(String ns, String search, int startRow, int pageSize) {
-		List searchList = new ArrayList();
+		List<BoardDTO> searchList = new ArrayList<BoardDTO>();
 	try {
 		
 		System.out.println(ns);
@@ -345,6 +346,7 @@ public class BoardDAO {
 		try {
 			con=getConnection();
 			String sql="select recommend from board where num=?";
+			pstmt=con.prepareStatement(sql);
 			pstmt.setInt(1, num);
 			
 			rs=pstmt.executeQuery();

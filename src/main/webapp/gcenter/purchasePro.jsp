@@ -12,21 +12,36 @@
 
 <%
 String id = (String)session.getAttribute("id");
-if(id==null){%>
-<script type="text/javascript">
-alret("로그인 후 구매해주세요");
-location.href="../member/logout.jsp";
-</script>
-	<%}%>
-<%
-String merchantId = request.getParameter("merchantId");
-int price = Integer.parseInt(request.getParameter("price"));
 MemberDAO memberDAO = new MemberDAO();
 MemberDTO memberDTO = memberDAO.getMember(id);
+String merchantId = request.getParameter("merchantId");
+int price = Integer.parseInt(request.getParameter("price"));
+String num = request.getParameter("boardNum");
+if(id==null){%>
+<script type="text/javascript">
+alert("로그인 후 구매해주세요");
+location.href="../member/logout.jsp";
+</script>
+	<%}
+
+if(price > memberDTO.getPoint_cur()) {%>
+<script type="text/javascript">
+alert("포인트가 부족합니다");
+history.back();
+</script>
+
+<%}else{ %>
+<%
+
+
+
 MemberDTO MmemberDTO = memberDAO.getMember(merchantId);
 
+
 memberDAO.usePoint(price, memberDTO, MmemberDTO);
-%>
+
+response.sendRedirect("gcontent.jsp?num="+num);
+}%>
 </body>
 
 </html>
