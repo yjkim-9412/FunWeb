@@ -108,7 +108,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
     for(int i = 0; i < boardList.size(); i++){
     	// 배열 한칸 데이터 가져올때 get()
     	BoardDTO boardDTO = boardList.get(i);%>
-    	<tr onclick="location.href='content.jsp?num=<%=boardDTO.getNum()%>'" style="cursor: pointer;"><td><%= boardDTO.getNum()%></td>
+    	<tr onclick="location.href='fcontent.jsp?num=<%=boardDTO.getNum()%>'" style="cursor: pointer;"><td><%= boardDTO.getNum()%></td>
     	 <%countComment = commentDAO.getCommentCount(boardDTO.getNum());%>
     	<td class="left"><%= boardDTO.getSubject()%> (<%=countComment%>)</td>
         <td><%=boardDTO.getName()%></td><td><%=dateFormat.format(boardDTO.getDate())%></td><td><%= boardDTO.getReadcount()%></td>
@@ -168,21 +168,21 @@ if(endPage > pageCount){
 <%
 if(startPage > pageBlock){
 	%>
-	<a href="notice.jsp?pageNum=<%=startPage-pageBlock%>">Prev</a>
+	<a href="fnotice.jsp?pageNum=<%=startPage-pageBlock%>">Prev</a>
 	<%
 }
 %>
 <%for(int i=startPage; i<=endPage; i++) {
 
 %>
-<a href="notice.jsp?pageNum=<%=i%>"><%=i %></a>
+<a href="fnotice.jsp?pageNum=<%=i%>"><%=i %></a>
 <%
 
 }
 %>
 <% if(endPage < pageCount){
 %>
-<a href="notice.jsp?pageNum=<%=startPage+pageBlock%>">Next</a>
+<a href="fnotice.jsp?pageNum=<%=startPage+pageBlock%>">Next</a>
 <%
 }
 %>

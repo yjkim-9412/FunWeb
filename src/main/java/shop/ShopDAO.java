@@ -213,6 +213,26 @@ public class ShopDAO {
 		
 		return count;
 	}//getShopCount
-	
+public void updateShop(BoardDTO boardDTO) {
+		
+		try {
+			con=getConnection();
+			
+			String sql = "update shop set subject=?,content=?,file=? where num=?";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setString(1, boardDTO.getSubject());
+			pstmt.setString(2, boardDTO.getContent());
+			pstmt.setString(3, boardDTO.getFile());
+			pstmt.setInt(4, boardDTO.getNum());
+			
+			pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		}finally {
+			closeDB();
+		}
+	}//updateBOard
 	
 }

@@ -94,7 +94,7 @@ boardDAO.updateReadcount(num);
 CommentDAO commentDAO = new CommentDAO();
 
 boardDTO.setNum(num);
-List<CommentDTO> commentList=commentDAO.getCommentList(boardDTO, startRow, pageSize);
+List<CommentDTO> commentList=commentDAO.getCommentList(boardDTO.getNum(), startRow, pageSize);
 
 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 
@@ -138,16 +138,19 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
     	// 배열 한칸 데이터 가져올때 get()
     	CommentDTO commentDTO = commentList.get(i);%>
     	
-    	<tr><td class="left"><%=commentDTO.getName() %></td>
+    	<tr><td class="left"><%=commentDTO.getName()%></td>
         <td colspan="2" style="width: 50%; "><%=commentDTO.getComment()%></td><td></td>
-        <td style="font-size: 1px"><%=dateFormat.format(commentDTO.getDate())%></td>
-        <td><%if(id != null){%>
-        
+        <td style="font-size: 1px"><%=dateFormat.format(commentDTO.getDate())%>
         <input type="hidden" name="comment_num" value="<%=commentDTO.getComment_num()%>">
-        <input type="hidden" name="num" value="<%=boardDTO.getNum()%>">
-        <input type="submit" value="댓글삭제" style="cursor: pointer; float: left;">
-        <input type="button" name="commentUpate" value="댓글수정" onclick="return fn_updateComment(this.form);" style="float: left;"><%}%></td>
+        <input type="hidden" name="num" value="<%=boardDTO.getNum()%>"></td>
         
+        <td><%if(id==null){%>
+        <%
+        }else if(id.equals(boardDTO.getId())){%>
+        	<input type="submit" value="댓글삭제" style="cursor: pointer; float: left;">
+            <input type="button" name="commentUpate" value="댓글수정" onclick="return fn_updateComment(this.form);" style="float: left;">
+       <% }%>
+        </td></tr>
         <%}
     } catch (Exception e) {
    			e.printStackTrace();}%>
@@ -191,7 +194,7 @@ int endPage = startPage + pageSize - 1;
 // 전체페이지 개수 구하기 글개수 50 , 한화면에 보여줄 글개수 10 => 페이지개수 5 + 0 => 5
 // 전체페이지 개수 구하기 글개수 50 , 한화면에 보여줄 글개수 10 => 페이지개수 5 + 1 => 6
 // int PageCount=글개수/pageSize + (글개수%pageSize==0?0:1);
-int count = boardDAO.getboardCount();
+int count = commentDAO.getCommentCount(boardDTO.getNum());
 
 int pageCount = count/pageSize + (count%pageSize==0?0:1);
 if(endPage > pageCount){

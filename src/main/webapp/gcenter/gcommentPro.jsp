@@ -33,7 +33,7 @@ commentDTO.setName(memberDTO.getName());
 commentDTO.setComment(comment);
 
 commentDAO.insertComment(commentDTO);
-response.sendRedirect("content.jsp?num="+ num);
+response.sendRedirect("gcontent.jsp?num="+ num);
 
 %>
 <script type="text/javascript">

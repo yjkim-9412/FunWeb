@@ -1,3 +1,4 @@
+<%@page import="shop.ShopDAO"%>
 <%@page import="com.oreilly.servlet.multipart.DefaultFileRenamePolicy"%>
 <%@page import="com.oreilly.servlet.MultipartRequest"%>
 <%@page import="board.BoardDAO"%>
@@ -24,22 +25,24 @@ String name = multi.getParameter("name");
 String subject = multi.getParameter("subject"); 
 String content = multi.getParameter("content");
 String file = multi.getFilesystemName("file");
+int price = Integer.parseInt(multi.getParameter("price"));
 
 if(file == null){
 	file = multi.getParameter("oldfile");
 }
 
-BoardDAO boardDAO = new BoardDAO();
+ShopDAO shopDAO = new ShopDAO();
 BoardDTO boardDTO = new BoardDTO();
 boardDTO.setName(name);
 boardDTO.setNum(num);
 boardDTO.setSubject(subject);
 boardDTO.setContent(content);
 boardDTO.setFile(file);
+boardDTO.setPrice(price);
 
-boardDAO.updateBoard(boardDTO);
+shopDAO.updateShop(boardDTO);
 
-response.sendRedirect("fnotice.jsp");
+response.sendRedirect("gnotice.jsp");
 %>
 </body>
 </html>

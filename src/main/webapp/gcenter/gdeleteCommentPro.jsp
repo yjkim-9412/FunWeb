@@ -24,7 +24,7 @@ if(id != null) {
 	
 	commentDAO.deleteComment(comment_num);
 	
-	response.sendRedirect("content.jsp?num=" + num);
+	response.sendRedirect("gcontent.jsp?num=" + num);
 }else{%>
 	<script type="text/javascript">
 	alret("세션값 틀림");

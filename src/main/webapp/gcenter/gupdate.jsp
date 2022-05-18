@@ -1,3 +1,4 @@
+<%@page import="shop.ShopDAO"%>
 <%@page import="board.BoardDTO"%>
 <%@page import="board.BoardDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -48,8 +49,8 @@
 <%
 String id = (String)session.getAttribute("id");
 int num = Integer.parseInt(request.getParameter("num"));
-BoardDAO boardDAO = new BoardDAO();
-BoardDTO boardDTO = boardDAO.getBoard(num);
+ShopDAO shopDAO = new ShopDAO();
+BoardDTO boardDTO = shopDAO.getShop(num);
 boardDTO.getName();
 if(id==null) {
 response.sendRedirect("../member/login.jsp");
@@ -59,7 +60,7 @@ response.sendRedirect("../member/login.jsp");
 <!-- 게시판 -->
 <article>
 <h1>Notice Update</h1>
-<form action="fupdatePro.jsp" method="post" enctype="multipart/form-data">
+<form action="gupdatePro.jsp" method="post" enctype="multipart/form-data">
 <input type="hidden" name="num" value="<%=num%>">
 <table id="notice">
 <tr><td>작성자</td><td><input type="text" name="name" value="<%=id%>" style="float: left;" readonly ></td></tr>
@@ -69,6 +70,7 @@ response.sendRedirect("../member/login.jsp");
         <input type="hidden" name="oldfile" value="<%=boardDTO.getFile() %>"></td></tr>
 <tr><td>내용</td>
 <td><textarea name="content" rows=10 cols=87 style="resize: none"  ><%=boardDTO.getContent()%></textarea></td></tr>
+<tr><td>가격</td><td colspan="3"><input type="text" name="price" value="<%=boardDTO.getPrice() %>">&nbsp; point</td></tr>
 </table>
 
 <div id="table_search">

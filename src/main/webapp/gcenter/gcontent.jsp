@@ -83,7 +83,8 @@ shopDAO.updateReadcount(num);
 CommentDAO commentDAO = new CommentDAO();
 
 boardDTO.setNum(num);
-List<CommentDTO> commentList=commentDAO.getCommentList(boardDTO, startRow, pageSize);
+
+List<CommentDTO> commentList=commentDAO.getCommentList(boardDTO.getNum(), startRow, pageSize);
 
 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 
@@ -103,7 +104,6 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 <tr><td>글내용</td><td colspan="3"><%=boardDTO.getContent()%></td></tr>
 <tr><td>가격</td><td colspan="3"><%=boardDTO.getPrice() %>&nbsp; point</td></tr>
 </table><br>
-
 <%if(id != null){%>
 <% if (!id.equals(boardDTO.getName())) {%>
 	<form action="purchasePro.jsp" method="post">
@@ -141,11 +141,11 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 <%try{
     for(int i = 0; i < commentList.size(); i++){
     	// 배열 한칸 데이터 가져올때 get()
-    	CommentDTO commentDTO = (CommentDTO)commentList.get(i);%>
+    	CommentDTO commentDTO = commentList.get(i);%>
     	<tr><td class="left"><%=commentDTO.getName() %></td>
         <td colspan="2" style="width: 50%; "><%=commentDTO.getComment()%></td><td></td>
         <td style="font-size: 1px"><%=dateFormat.format(commentDTO.getDate())%></td>
-        <td><%if(id.equals(commentDTO.getId())){%>
+        <td><input type="hidden" value="<%=commentDTO.getId()%>"><%if(id.equals(commentDTO.getId())){%>
         
         <input type="hidden" name="gcomment_num" value="<%=commentDTO.getComment_num()%>">
         <input type="hidden" name="num" value="<%=boardDTO.getNum()%>">
@@ -155,8 +155,8 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
         
         </tr>
         <%}
-    } catch (Exception e) {
-   			e.printStackTrace();}%>
+        } catch (Exception e){
+        	e.printStackTrace();}%>
 </table>
 </form>
 </fieldset>
@@ -173,22 +173,67 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 
 </form>
 </div>
+<div id="page_control">
 <%
-int pageBlock = 3;
 
-int startPage = currentPage-1 / pageBlock * pageBlock+1;
 
+int pageBlock=3;
+
+//시작하는 페이지 번호
+// pageNum(currentPage) pageBlock => startPage
+// 		1~10(0~9)			10		=>	0*10 + 1 => 1
+//		11~20(10~19)		10		=>	1*10 + 1 =>11
+//		21~30(20~29)		10		=>	2*10 + 1 =>21
+int startPage = (currentPage-1) / pageBlock * pageBlock+1; 
+//끝나는 페이지 번호
 int endPage = startPage + pageSize - 1;
 
 
+
+// 구한 끝나는 페이지번호 10, 실제 페이지 번호 2
+// 글개수 구하기
+
+// 전체페이지 개수 구하기 글개수 50 , 한화면에 보여줄 글개수 10 => 페이지개수 5 + 0 => 5
+// 전체페이지 개수 구하기 글개수 50 , 한화면에 보여줄 글개수 10 => 페이지개수 5 + 1 => 6
+// int PageCount=글개수/pageSize + (글개수%pageSize==0?0:1);
+int count = commentDAO.getCommentCount(boardDTO.getNum());
+
+int pageCount = count/pageSize + (count%pageSize==0?0:1);
+if(endPage > pageCount){
+	endPage=pageCount;
+	}
 %>
+
+<%
+if(startPage > pageBlock){
+	%>
+	<a href="content.jsp?pageNum=<%=startPage-pageBlock%>&num=<%=num%>">Prev</a>
+	<%
+}
+%>
+<%for(int i=startPage; i<=endPage; i++) {
+
+%>
+<a href="content.jsp?pageNum=<%=i%>&num=<%=num%>"><%=i %></a>
+<%
+
+}
+%>
+<% if(endPage < pageCount){
+%>
+<a href="content.jsp?pageNum=<%=startPage+pageBlock%>&num=<%=num%>">Next</a>
+<%
+}
+%>
+
+</div>
 
 
 <div id="table_search">
 <%if(id != null ) {%>
 	
 	<%if(id.equals(boardDTO.getName())) {%>
-<input type="button" value="글수정" class="btn" style="cursor: pointer;" onclick="location.href='fupdate.jsp?num=<%=boardDTO.getNum()%>'">
+<input type="button" value="글수정" class="btn" style="cursor: pointer;" onclick="location.href='gupdate.jsp?num=<%=boardDTO.getNum()%>'">
 <form action="fdeleteBoard.jsp" name="deleteB" onsubmit="return fn_deleteBoard()" style="float: left;">
 <input type="hidden" name="num" value="<%=boardDTO.getNum()%>">
 <input type="submit" value="글삭제" class="btn" style="cursor: pointer;">
