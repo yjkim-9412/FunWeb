@@ -133,6 +133,7 @@ function fn_Checkaddr() {
 						document.getElementById('addr2').focus();
 					}
 				}).open();
+		self.close();
 	}
 </script>
 
@@ -249,7 +250,7 @@ function fn_Checkaddr() {
 <input type="text" name="address" id="addr1" >
 <input type="button" value="주소검색" class="dup"  onclick="fn_Checkaddr()" style="cursor: pointer;"><br>
 <label>상세주소</label>
-<input type="text" name="address2" id="addr1" ><br>
+<input type="text" name="address2" id="addr2" ><br>
 <label>집전화</label>
 <input type="text" name="phone"><br>
 <label>개인번호</label>

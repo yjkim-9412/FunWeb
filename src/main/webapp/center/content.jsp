@@ -94,7 +94,7 @@ boardDAO.updateReadcount(num);
 CommentDAO commentDAO = new CommentDAO();
 
 boardDTO.setNum(num);
-List<CommentDTO> commentList=commentDAO.getCommentList(boardDTO.getNum(), startRow, pageSize);
+List<CommentDTO> commentList=commentDAO.getCommentList(boardDTO, startRow, pageSize);
 
 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 

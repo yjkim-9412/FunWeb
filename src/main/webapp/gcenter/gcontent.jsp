@@ -84,7 +84,7 @@ CommentDAO commentDAO = new CommentDAO();
 
 boardDTO.setNum(num);
 
-List<CommentDTO> commentList=commentDAO.getCommentList(boardDTO.getNum(), startRow, pageSize);
+List<CommentDTO> commentList=commentDAO.getCommentList(boardDTO, startRow, pageSize);
 
 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 
@@ -105,7 +105,7 @@ SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.M.d. H:mm");
 <tr><td>가격</td><td colspan="3"><%=boardDTO.getPrice() %>&nbsp; point</td></tr>
 </table><br>
 <%if(id != null){%>
-<% if (!id.equals(boardDTO.getName())) {%>
+<% if (!id.equals(boardDTO.getId())) {%>
 	<form action="purchasePro.jsp" method="post">
 	<input type="hidden" name="price" value="<%=boardDTO.getPrice()%>"> 
 	<input type="hidden" name="merchantId" value="<%=boardDTO.getName()%>"> 

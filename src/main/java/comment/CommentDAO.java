@@ -83,21 +83,21 @@ public class CommentDAO {
 			
 		}//insertComment
 		
-		public List<CommentDTO> getCommentList(int boardnum, int startRow, int pageSize) {
+		public List<CommentDTO> getCommentList(BoardDTO boardDTO, int startRow, int pageSize) {
 			// List 객체 생성
 			// 처음에는 10개 기억장소 할당 => 11개 부터 또 다른 10개 기억장소 할당 
 			// List 배열내장객체 값을 저장 .add(DTO) 주소값 순서대로 한칸씩 저장
 			// 값을 가져올때 .get(순서) 배열 한칸 값을 가져오기
 			// 배열 크기 .size()
 			List<CommentDTO> commentList = new ArrayList<CommentDTO>();
-				System.out.println(boardnum);
+				System.out.println(boardDTO);
 			try {
 				// 1, 2 디비연결 메서드 호출
 				con=getConnection();
 				// 3 sql select 게시판 전체 글 가져오기
 				String sql="select * from comment where num=? order by comment_num limit ?,? ";
 				pstmt=con.prepareStatement(sql);
-				pstmt.setInt(1, boardnum);
+				pstmt.setInt(1, boardDTO.getNum());
 				pstmt.setInt(2, startRow-1);
 				pstmt.setInt(3, pageSize);
 				// 4 실행 => 결과 저장
