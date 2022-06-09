@@ -12,8 +12,8 @@
 $(document).ready(function(){
 	 
     // 저장된 쿠키값을 가져와서 ID 칸에 넣어준다. 없으면 공백으로 들어감.
-    var key = getCookie("key");
-    $("#userId").val(key); 
+	let key = getCookie("key");
+	$("#userId").val(key);
      
     if($("#userId").val() != ""){ // 그 전에 ID를 저장해서 처음 페이지 로딩 시, 입력 칸에 저장된 ID가 표시된 상태라면,
         $("#idSaveCheck").attr("checked", true); // ID 저장하기를 체크 상태로 두기.
@@ -36,27 +36,27 @@ $(document).ready(function(){
 });
 
 function setCookie(cookieName, value, exdays){
-    var exdate = new Date();
-    exdate.setDate(exdate.getDate() + exdays);
-    var cookieValue = escape(value) + ((exdays==null) ? "" : "; expires=" + exdate.toGMTString());
-    document.cookie = cookieName + "=" + cookieValue;
+	let exdate = new Date();
+	exdate.setDate(exdate.getDate() + exdays);
+	let cookieValue = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toGMTString());
+	document.cookie = cookieName + "=" + cookieValue;
 }
  
 function deleteCookie(cookieName){
-    var expireDate = new Date();
-    expireDate.setDate(expireDate.getDate() - 1);
+	let expireDate = new Date();
+	expireDate.setDate(expireDate.getDate() - 1);
     document.cookie = cookieName + "= " + "; expires=" + expireDate.toGMTString();
 }
  
 function getCookie(cookieName) {
     cookieName = cookieName + '=';
-    var cookieData = document.cookie;
-    var start = cookieData.indexOf(cookieName);
-    var cookieValue = '';
-    if(start != -1){
+	let cookieData = document.cookie;
+	let start = cookieData.indexOf(cookieName);
+	let cookieValue = '';
+	if(start != -1){
         start += cookieName.length;
-        var end = cookieData.indexOf(';', start);
-        if(end == -1)end = cookieData.length;
+		let end = cookieData.indexOf(';', start);
+		if(end == -1)end = cookieData.length;
         cookieValue = cookieData.substring(start, end);
     }
     return unescape(cookieValue);
